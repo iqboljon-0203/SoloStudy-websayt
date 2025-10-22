@@ -1,6 +1,2 @@
-public/materials/**/*.pptx filter=lfs diff=lfs merge=lfs -text
-public/materials/**/*.ppt filter=lfs diff=lfs merge=lfs -text
-public/library/**/*.pptx filter=lfs diff=lfs merge=lfs -text
-public/library/**/*.ppt filter=lfs diff=lfs merge=lfs -text
 public/materials/** !text !filter !merge !diff
 public/library/** !text !filter !merge !diff
