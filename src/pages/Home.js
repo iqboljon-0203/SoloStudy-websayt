@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Back1 from "../assets/back1.jpg";
+import Back2 from "../assets/back2.jpg";
+import Back3 from "../assets/back3.jpg";
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
@@ -133,13 +136,13 @@ const Home = () => {
             </a>
             <a
               href="/about"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Biz haqimizda</span>
             </a>
             <a
               href="/contact"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Bog'lanish</span>
             </a>
@@ -166,7 +169,7 @@ const Home = () => {
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
                   backgroundImage:
-                    'linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDm-MHnMobT3-m56NG9zVRI6WS31U7d6nr9bWo2mBybYOXdnyTga_YWv2ps-nisyay8p1Xdxylu7EGZbo_AjtG6PWoFZvuxVOOaqobgKFTnw1gol-YjTGCUFZHvjT_IU4xglVoAqJZ8-RqrgH2GEiECAxCOYOet7MmgMoMN5KnRiV7M0ZUXsEtDosIvWd5NN4RzCN5k5dVRXPrQQHsGY3lXMz0mvddISqZ3xkkuTTBULBFXGzeF1UVUy2lrVr6UQlaVUlXRgmfxj2M")',
+                    `linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(${Back1})`,
                 }}
               ></div>
               <div className="absolute inset-0 bg-background-dark/30 dark:bg-background-dark/50"></div>
@@ -175,13 +178,13 @@ const Home = () => {
                   Kelajak sari ilm bilan
                 </h1>
                 <p className="mt-4 max-w-2xl mx-auto text-base sm:text-lg lg:text-xl font-light text-gray-200 dark:text-gray-300">
-                  Bizning ta'lim platformamiz orqali o'z imkoniyatlaringizni
-                  kashf eting. Keng ko'lamli materiallar, interaktiv darslar va
-                  o'z rivojlanishingizni kuzatib boring.
+                  SoloStudy — bu talabalarning mustaqil ta’lim jarayonini yangi bosqichga olib chiqish uchun yaratilgan innovatsion raqamli platforma.
                 </p>
-                <button className="mt-8 h-12 px-6 rounded-xl bg-primary text-text-primary-light text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50 mx-auto">
+                <Link to="/materials">
+                  <button className="mt-8 h-12 px-6 rounded-xl bg-primary text-text-primary-light text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50 mx-auto">
                   O'qishni boshlash
                 </button>
+                </Link>
               </div>
             </div>
 
@@ -190,7 +193,7 @@ const Home = () => {
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
                   backgroundImage:
-                    'linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBb2zeGGFKOOrMQq1j8yHRHVYqpByQgWePEzg9CR1MvbvjyBc-_rdoSy5uh8i5h3SnaUWrg1cooFK92hmIIMDVXZxNne45o-Y-RTf4mF8q2g4tINuvlHFkKNqkW7Rin1McTRVKYSK9t2DFnynPpIvtofolaPJ7sVMG_Mnxv2UOvucaQ2c2aTZb1D-Dmt7CTcmTg3nQHtUuhWeVLNJ5zKCFBESJKhdlGns0M_wBvwKBowUkamRItL5ZJPMxIMcVUL5iUQZFBWgfqvlE")',
+                    `linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(${Back2})`,
                 }}
               ></div>
               <div className="absolute inset-0 bg-background-dark/30 dark:bg-background-dark/50"></div>
@@ -199,12 +202,13 @@ const Home = () => {
                   Interaktiv ta'lim muhiti
                 </h1>
                 <p className="mt-4 max-w-2xl mx-auto text-base sm:text-lg lg:text-xl font-light text-gray-200 dark:text-gray-300">
-                  Zamonaviy o'qitish usullari va texnologiyalar yordamida bilim
-                  olish yanada qiziqarli va samarali bo'ladi.
+                  SoloStudy — o‘z ustida ishlaydigan, yangilikka intiluvchi va zamonaviy texnologiyalarni o‘zlashtirgan yoshlar uchun yaratilgan ta’lim maydoni.
                 </p>
+                <Link to="/videos">
                 <button className="mt-8 h-12 px-6 rounded-xl bg-primary text-text-primary-light text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50 mx-auto">
                   Darslarni ko'rish
                 </button>
+                </Link> 
               </div>
             </div>
 
@@ -213,7 +217,7 @@ const Home = () => {
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
                   backgroundImage:
-                    'linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBrPYuyjG3rKBZTh2vaZOVMN_ME-UGVjUmen_VU2IXtPmzkagLjq_rbTGNHG5gP9iy7phEiE54bWie1qIBJbPnpABZuC-LGlbz4uEcxeS9bctfwjrp1wxdSjcQM4g0hCrRMMe3ipUJvNO218mT4d8Qhvu-Z7wO8_qPUffdI0X9-mR6X9VH8HLqg1u7_LJ8OiwFBkgjOzKVRS63isZouV6IPgGKicNF3SbnoGDN56hsU3Bb_o9eYSy7l_GQr5VC5wwV7vmzOYGoPv7I")',
+                    `linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(${Back3})`,
                 }}
               ></div>
               <div className="absolute inset-0 bg-background-dark/30 dark:bg-background-dark/50"></div>
@@ -222,28 +226,39 @@ const Home = () => {
                   Professional o'qituvchilar
                 </h1>
                 <p className="mt-4 max-w-2xl mx-auto text-base sm:text-lg lg:text-xl font-light text-gray-200 dark:text-gray-300">
-                  Tajribali va malakali o'qituvchilarimiz sizning
-                  muvaffaqiyatingiz uchun doimo yordam berishga tayyor.
+                  SoloStudy — har bir talabaning mustaqil fikrlaydigan, ijodkor va raqamli texnologiyalardan samarali foydalana oladigan shaxs sifatida shakllanishiga ko‘maklashishdir.
                 </p>
-                <button className="mt-8 h-12 px-6 rounded-xl bg-primary text-text-primary-light text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50 mx-auto">
+                <Link to={"/about"}>
+                 <button className="mt-8 h-12 px-6 rounded-xl bg-primary text-text-primary-light text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50 mx-auto">
                   O'qituvchilar bilan tanishing
                 </button>
+                </Link>
+               
               </div>
             </div>
           </Slider>
         </section>
 
         {/* Purpose Section */}
-        <section className="py-16 sm:py-24">
+        <section className="py-12 sm:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Bizning maqsadimiz
+              Bizning maqsadimiz:
+            </h2>
+            <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600 dark:text-gray-400 mb-8">
+             <span className="font-bold"> SoloStudy </span>platformasining asosiy maqsadi - talabalarga mustaqil ta’lim olish uchun qulay, interaktiv va zamonaviy muhit yaratish, shuningdek, o‘qituvchilarga ta’lim jarayonini innovatsion texnologiyalar orqali samarali tashkil etishda yordam berishdir.
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+              Platforma orqali foydalanuvchilar:
             </h2>
             <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600 dark:text-gray-400">
-              SoloStudy platformasining asosiy maqsadi - barcha yoshdagi
-              o'quvchilar uchun sifatli ta'lim berish. Biz hamkorlikda o'qitish
-              muhitini yaratishga, o'quvchilar va o'qituvchilarning
-              rivojlanishiga ishonamiz.
+             <ul className="list-inside">
+              <li className="mb-4">📘 Elektron darsliklar va o‘quv materiallarini o‘rganadi</li>
+              <li className="mb-4">🎥 Video darslarni tomosha qiladi</li>
+              <li className="mb-4">🧠 Onlayn testlar orqali o‘z bilimini tekshiradi</li>
+              <li className="mb-4">💬 Forumda fikr almashadi va savollar beradi</li>
+             </ul>
+
             </p>
           </div>
         </section>
@@ -326,25 +341,29 @@ const Home = () => {
                 <span className="material-symbols-outlined text-[#A7D9FF]">
                   auto_stories
                 </span>
+                <Link to={"/materials"}>
                 <span className="text-base font-bold text-primary-light dark:text-primary">
                   O'quv materiallari
-                </span>
+                </span></Link>
               </button>
               <button className="group flex items-center justify-center gap-3 h-16 px-6 rounded-xl bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30 shadow-md hover:shadow-xl transition-all">
                 <span className="material-symbols-outlined text-[#A7D9FF]">
                   movie
                 </span>
+               <Link to={"/videos"}>
                 <span className="text-base font-bold text-primary-light dark:text-primary">
                   Video darslar
-                </span>
+                </span></Link>
               </button>
               <button className="group flex items-center justify-center gap-3 h-16 px-6 rounded-xl bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30 shadow-md hover:shadow-xl transition-all sm:col-span-2 lg:col-span-1">
                 <span className="material-symbols-outlined text-[#A7D9FF]">
                   quiz
                 </span>
+                <Link to={"/tests"}>
                 <span className="text-base font-bold text-primary-light dark:text-primary">
                   Testlar
                 </span>
+                </Link>
               </button>
             </div>
           </div>

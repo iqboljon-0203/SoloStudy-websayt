@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 const About = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
@@ -130,13 +130,13 @@ const About = () => {
             </a>
             <a
               href="/about"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Biz haqimizda</span>
             </a>
             <a
               href="/contact"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Bog'lanish</span>
             </a>
@@ -158,73 +158,48 @@ const About = () => {
           <div className="mt-20 space-y-20">
             <div>
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white text-center fade-in-up">
-                Asoschilar
+                Asoschi:
               </h2>
-              <div className="mt-10 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:gap-16">
-                <div
-                  className="flex flex-col items-center text-center fade-in-up"
-                  style={{ animationDelay: "0.1s" }}
-                >
-                  <div className="relative group">
-                    <img
-                      alt="Dr. Amelia Harper"
-                      className="h-40 w-40 rounded-full object-cover shadow-lg group-hover:shadow-xl transition-shadow duration-300"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQj0XrRpNB5IDLoTtnLez2n_m3VtDFcEktF7VWdLiymd4MCNE3leeAxSALSDaHOgmNFSNwr5cPnNmVD7ghwNX-ARR6ieEyosDwoDnUV3QikLONn4PZv1EYW9LKKyjFao9pfYL_IdWq55HlO_kyNtXRJEPAkDYyITMn-nGhy4pxlM_leRw0gFILaX2RTshu00R8LSB85xDH0z0r5ujUMzBgFtV_H5ulALW7tZT6sOiP1I171UmQb8kUSf191Slxph8xk1lr14AXk4w"
-                    />
-                    <div className="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-                  <div className="mt-6">
-                    <h3 className="text-lg font-semibold leading-7 tracking-tight text-gray-900 dark:text-white">
-                      Dr. Amelia Harper
-                    </h3>
-                    <p className="text-base leading-6 text-primary">
-                      Ham asoschi va Bosh direktor
-                    </p>
-                    <div className="mt-4 flex justify-center gap-x-6">
-                      <a
-                        className="text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
-                        href="mailto:hello@solostudy.uz"
-                        aria-label="Email Dr. Amelia Harper"
-                      >
-                        <span className="material-symbols-outlined">
-                          alternate_email
-                        </span>
-                      </a>
-                      <a
-                        className="text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
-                        href="https://solostudy.uz"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="SoloStudy website"
-                      >
-                        <span className="material-symbols-outlined">link</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
+              <div className="mt-10 space-y-8">
+                
 
-                <div
-                  className="flex flex-col items-center text-center fade-in-up"
-                  style={{ animationDelay: "0.2s" }}
-                >
-                  <div className="relative group">
-                    <img
-                      alt="Dr. Ethan Carter"
-                      className="h-40 w-40 rounded-full object-cover shadow-lg group-hover:shadow-xl transition-shadow duration-300"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHW-w0xGP-JrLxgdKxYQSdYBq1uQyoDLM644hA35fSGL-1GV4C7Fzo8wh_pSofiQaNkWACzuIVy_2-MvCmVvL50ATirKg9a3rBDMtCal7G2mPdIG7o1d2NE6RU_4qitaLvqeKcEJQ0-VxfyNtUhnG9Ajd0kK_gC5qs7s_rhqaIbfYuHE7ahGChMlupmhw2biFex_erDbQkLZzv4MLPq2myvrnJNJB0gs_98FeGPsHwFNb6ugCatZ91hgWaooLXg22oEfk39gJoNWw"
-                    />
-                    <div className="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-                  <div className="mt-6">
-                    <h3 className="text-lg font-semibold leading-7 tracking-tight text-gray-900 dark:text-white">
-                      Dr. Ethan Carter
+                {/* Founder 2 */}
+                <div className="flex flex-col md:flex-row items-start gap-6 bg-white/5 dark:bg-black/5 p-6 rounded-2xl shadow-sm">
+                  <img
+                    alt="Quvondiqova Mohinur Ilhomiddin qizi"
+                    className="w-full md:w-1/3 h-64 md:h-80 object-cover rounded-lg shadow-lg"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHW-w0xGP-JrLxgdKxYQSdYBq1uQyoDLM644hA35fSGL-1GV4C7Fzo8wh_pSofiQaNkWACzuIVy_2-MvCmVvL50ATirKg9a3rBDMtCal7G2mPdIG7o1d2NE6RU_4qitaLvqeKcEJQ0-VxfyNtUhnG9Ajd0kK_gC5qs7s_rhqaIbfYuHE7ahGChMlupmhw2biFex_erDbQkLZzv4MLPq2myvrnJNJB0gs_98FeGPsHwFNb6ugCatZ91hgWaooLXg22oEfk39gJoNWw"
+                  />
+                  <div className="text-center md:text-left">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      Quvondiqova Mohinur Ilhomiddin qizi
                     </h3>
-                    <p className="text-base leading-6 text-primary">
-                      Ham asoschi va Texnologiyalar bo'yicha direktor
+                    <p className="mt-1 text-primary font-medium">
+                      Andijon davlat pedagogika instituti Boshlangʻich ta’lim
+                      metodikasi kafedrasi oʻqituvchisi
                     </p>
-                    <div className="mt-4 flex justify-center gap-x-6">
+                    <p className="mt-3 text-gray-600 dark:text-gray-400 max-w-xl">
+                      Quvondiqova Mohinur Ilhomiddin qizi 1994-yil 13- iyulda
+                      Navoiy viloyati, Nurota tumanida ziyoli oilasida
+                      tugʻilgan. Millati-oʻzbek. M.Quvondiqova Navoiy shahar
+                      16-umumta’lim maktabni 2010-yilda tamomlagan. 2013-yilda
+                      Navoiy davlat pedagogika instituti huzuridagi 1-sonli
+                      akademik litseyni tamomlagan. 2015-yil Navoiy davlat
+                      pedagogika institutining Maktabgacha va Boshlangʻich
+                      ta’lim fakultetiga oʻqishga qabul qilingan. 2019-yili
+                      oʻqishni tamomlab, 2019-2021-yillar davomida Navoiy davlat
+                      pedagogika institutida magistratura boʻlimining Pedagogika
+                      va Psixologiya yoʻnalishida tahsil olgan. 2023-yilda
+                      Andijon davlat pedagogika instituti 13.00.01-Pedagogika
+                      nazariyasi. Pedagogik ta’limotlar tarixi ixtisosligi
+                      boʻyicha tayanch doktarantlar safiga qabul
+                      qilingan.2022-yildan hozirgi kunga qadar Andijon davlat
+                      pedagogika instituti Boshlangʻich ta’lim metodikasi
+                      kafedrasida faoliyat olib bormoqda.
+                    </p>
+                    <div className="mt-4 flex items-center gap-4 justify-center md:justify-start">
                       <a
-                        className="text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+                        className="text-gray-400 hover:text-primary"
                         href="mailto:hello@solostudy.uz"
                         aria-label="Email Dr. Ethan Carter"
                       >
@@ -233,7 +208,7 @@ const About = () => {
                         </span>
                       </a>
                       <a
-                        className="text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+                        className="text-gray-400 hover:text-primary"
                         href="https://solostudy.uz"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -242,70 +217,6 @@ const About = () => {
                         <span className="material-symbols-outlined">link</span>
                       </a>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white text-center fade-in-up">
-                O'qituvchilar
-              </h2>
-              <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-                <div
-                  className="flex flex-col items-center text-center p-6 bg-white/5 dark:bg-black/5 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 fade-in-up"
-                  style={{ animationDelay: "0.3s" }}
-                >
-                  <img
-                    alt="Ms. Olivia Bennett"
-                    className="h-24 w-24 rounded-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9LqjYvPS1HgjqA_JXJYO30oxf0nmKhDItot3VxP6Ac5v60cdXkU49ctwotPX-7owXkTs7t2iAMWVuAp-RohTUDctDtj1yjh4nBjJ53Yswt1MzdJVxeGFXnZwdLGxtZT6I3DlU_ycISqM1ZO3Raojyp8FUSEKMpJgy-qwxyBywNnZl7QvWhoreJElfTWA7Fx2TpB2yAXQiQQCpEzgsdFt3CK2ypOaxo-IQpJSRhMPOWgBSMqAyc37souYKBK1pHzRzQ7DiLMCmp94"
-                  />
-                  <div className="mt-4">
-                    <h3 className="text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-white">
-                      Ms. Olivia Bennett
-                    </h3>
-                    <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
-                      Matematika o'qituvchisi
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  className="flex flex-col items-center text-center p-6 bg-white/5 dark:bg-black/5 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 fade-in-up"
-                  style={{ animationDelay: "0.4s" }}
-                >
-                  <img
-                    alt="Mr. Noah Thompson"
-                    className="h-24 w-24 rounded-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXtQruoprgF73P-ITgN9HwMH4QaaXGSUGfOKlCUl0IiPYlf3aE2-9ZXEB4lcNhKvGJG8sEyHDzaOOZMJNN6WWLPfX1Zg3AgtQYwTWzdac_S6lHyx6mTJcjgo9sygfAF7Si9C4Gun-D60fHt3ZZORyijzeddJ6VLolvIsAM0WtQgqRcr1Ex3KYudqI2w-Lo3mm4qoBjM3GcVxTSwA3ZWBtODMy3kYY33rjFndSobug2tnQy-U50ClbEwoaQEcyK_alEkMgwYOBjpqQ"
-                  />
-                  <div className="mt-4">
-                    <h3 className="text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-white">
-                      Mr. Noah Thompson
-                    </h3>
-                    <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
-                      Fanlar o'qituvchisi
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  className="flex flex-col items-center text-center p-6 bg-white/5 dark:bg-black/5 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 fade-in-up"
-                  style={{ animationDelay: "0.5s" }}
-                >
-                  <img
-                    alt="Dr. Sophia Clark"
-                    className="h-24 w-24 rounded-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFSxlospuOVYXZRWlEvJuTJf3obwGmocBl0QBfNG9V_Z85K0jgBM53wL2zV5r7SWw8vDp5_x2f77-iXmRBnlHIj5f72Fkfci19ohXZIzr73XTfbkRm18cOuZ4CH0dznzIwzcwxuMTjS3_F-7wESqZo8KyjzSjeLwjRF_mdJ9r64CV9RunGoyYkXbAkfkus00LiuH6QmLIjiLq_FUPDka-ko4zmxrUAzNXIK-RZZtYwQA1iE1eorwW4SquGFO4zLIKKME3Ra-Wap7M"
-                  />
-                  <div className="mt-4">
-                    <h3 className="text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-white">
-                      Dr. Sophia Clark
-                    </h3>
-                    <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
-                      Adabiyot o'qituvchisi
-                    </p>
                   </div>
                 </div>
               </div>

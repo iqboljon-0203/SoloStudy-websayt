@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { topics } from "../data/tests";
 const Tests = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const topic = topics[0];
+  const questions = topic?.questions || [];
+  const [selections, setSelections] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [score, setScore] = useState(0);
+
+  const handleSelect = (qid, oid) => {
+    setSelections((prev) => ({ ...prev, [qid]: oid }));
+  };
+
+  const handleSubmit = () => {
+    const correct = questions.reduce((acc, q) => {
+      const selected = selections[q.id];
+      const opt = (q.options || []).find((o) => o.id === selected);
+      return acc + (opt && opt.isCorrect ? 1 : 0);
+    }, 0);
+    setScore(correct);
+    setSubmitted(true);
+  };
+
+  const total = questions.length;
+  const answered = Object.keys(selections).length;
+  const progress = total ? Math.round((answered / total) * 100) : 0;
+  const percent = total ? Math.round((score / total) * 100) : 0;
   return (
     <div className="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200 min-h-screen">
       {/* Header */}
@@ -66,7 +90,7 @@ const Tests = () => {
               Kutubxona
             </a>
           </nav>
-     <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <a
               href="/about"
               className="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all hover:shadow-lg bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
@@ -93,7 +117,7 @@ const Tests = () => {
         {isMenuOpen && (
           <div className="lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
             <a
-              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
               href="/"
             >
               Bosh sahifa
@@ -111,7 +135,7 @@ const Tests = () => {
               Videolar
             </a>
             <a
-              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
               href="/tests"
             >
               Testlar
@@ -130,13 +154,13 @@ const Tests = () => {
             </a>
             <a
               href="/about"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Biz haqimizda</span>
             </a>
             <a
               href="/contact"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Bog'lanish</span>
             </a>
@@ -160,199 +184,94 @@ const Tests = () => {
               <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
                 Jarayon
               </span>
-              <span className="text-sm font-bold text-primary">60%</span>
+              <span className="text-sm font-bold text-primary">{progress}%</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
               <div
                 className="bg-primary h-2.5 rounded-full"
-                style={{ width: "60%" }}
+                style={{ width: `${progress}%` }}
               ></div>
             </div>
           </div>
 
           <div className="space-y-12">
-            <div className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
-                <span className="text-primary font-bold">Savol 1:</span> Bir
-                nechta javobdan biri
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Quyidagilardan qaysi biri ma'lumotlar tuzilmasi turi emas?
-              </p>
-              <div className="space-y-3">
-                <label className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer">
-                  <input
-                    className="form-radio text-primary focus:ring-primary focus:ring-offset-0"
-                    name="question1"
-                    type="radio"
-                  />
-                  <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Massiv (Array)
-                  </span>
-                </label>
-                <label className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer">
-                  <input
-                    className="form-radio text-primary focus:ring-primary focus:ring-offset-0"
-                    name="question1"
-                    type="radio"
-                  />
-                  <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Bog'langan ro'yxat (Linked List)
-                  </span>
-                </label>
-                <label className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer">
-                  <input
-                    className="form-radio text-primary focus:ring-primary focus:ring-offset-0"
-                    name="question1"
-                    type="radio"
-                  />
-                  <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Daraxt (Tree)
-                  </span>
-                </label>
-                <label className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer">
-                  <input
-                    defaultChecked
-                    className="form-radio text-primary focus:ring-primary focus:ring-offset-0"
-                    name="question1"
-                    type="radio"
-                  />
-                  <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Algoritm
-                  </span>
-                </label>
+            {questions.map((q, idx) => (
+              <div key={q.id} className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
+                  <span className="text-primary font-bold">Savol {idx + 1}:</span>
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">{q.text}</p>
+                <div className="space-y-3">
+                  {(q.options || []).map((opt) => (
+                    <label key={opt.id} className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer">
+                      <input
+                        className="form-radio text-primary focus:ring-primary focus:ring-offset-0"
+                        name={`question_${q.id}`}
+                        type="radio"
+                        checked={selections[q.id] === opt.id}
+                        onChange={() => handleSelect(q.id, opt.id)}
+                      />
+                      <span className={`ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 ${submitted && opt.isCorrect ? "font-bold" : ""}`}>
+                        {opt.text}
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
 
-            <div className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
-                <span className="text-primary font-bold">Savol 2:</span> To'g'ri
-                yoki noto'g'ri
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                To'g'ri yoki noto'g'ri: Ikkilik qidiruv faqat saralangan
-                massivlarga tatbiq etiladi.
-              </p>
-              <div className="space-y-3">
-                <label className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer">
-                  <input
-                    defaultChecked
-                    className="form-radio text-primary focus:ring-primary focus:ring-offset-0"
-                    name="question2"
-                    type="radio"
-                  />
-                  <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    To'g'ri
-                  </span>
-                </label>
-                <label className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer">
-                  <input
-                    className="form-radio text-primary focus:ring-primary focus:ring-offset-0"
-                    name="question2"
-                    type="radio"
-                  />
-                  <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Noto'g'ri
-                  </span>
-                </label>
+            {total > 0 && (
+              <div className="text-right">
+                <button
+                  onClick={handleSubmit}
+                  disabled={submitted || answered < total}
+                  className={`px-8 py-3 text-base font-bold text-gray-800 rounded-lg shadow-lg transform transition-all ${submitted || answered < total ? "bg-gray-300 dark:bg-gray-700 cursor-not-allowed" : "bg-primary hover:shadow-xl hover:bg-primary/90 hover:-translate-y-0.5"}`}
+                >
+                  Testni yuborish
+                </button>
               </div>
-            </div>
-
-            <div className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
-                <span className="text-primary font-bold">Savol 3:</span>{" "}
-                Ochilgan savol
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                Rekursiya tushunchasini misol bilan tushuntiring.
-              </p>
-              <textarea
-                className="w-full h-36 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-background-light dark:bg-gray-800 focus:ring-primary focus:border-primary transition-colors text-sm text-gray-700 dark:text-gray-300"
-                placeholder="Javobingizni shu yerga yozing..."
-              ></textarea>
-            </div>
-
-            <div className="text-right">
-              <button className="px-8 py-3 text-base font-bold text-gray-800 bg-primary rounded-lg shadow-lg hover:shadow-xl hover:bg-primary/90 transform hover:-translate-y-0.5 transition-all">
-                Testni yuborish
-              </button>
-            </div>
+            )}
           </div>
 
-          <div className="mt-16 pt-10 border-t border-gray-200 dark:border-gray-700">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              Test natijalari
-            </h2>
-            <div className="bg-primary/10 dark:bg-primary/20 p-4 rounded-lg mb-8 flex items-center gap-4">
-              <p className="text-lg font-semibold text-primary">
-                Siz 3 savoldan 2tasiga to'g'ri javob berdingiz.
-              </p>
-            </div>
-
-            <div className="space-y-8">
-              <div className="bg-red-500/10 dark:bg-red-500/20 p-6 rounded-xl border border-red-500/20">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
-                  Savol 1
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-2">
-                  Sizning javobingiz:{" "}
-                  <span className="font-semibold text-red-600 dark:text-red-400">
-                    Algoritm (Noto'g'ri)
-                  </span>
+          {submitted && (
+            <div className="mt-16 pt-10 border-t border-gray-200 dark:border-gray-700">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Test natijalari</h2>
+              <div className="bg-primary/10 dark:bg-primary/20 p-4 rounded-lg mb-8 flex items-center gap-4">
+                <p className="text-lg font-semibold text-primary">
+                  Siz {total} savoldan {score} tasiga to'g'ri javob berdingiz.
                 </p>
-                <p className="text-gray-600 dark:text-gray-300 mb-3">
-                  To'g'ri javob:{" "}
-                  <span className="font-semibold text-green-600 dark:text-green-400">
-                    Algoritm
-                  </span>
-                </p>
-                <div className="p-3 bg-white/50 dark:bg-background-dark/50 rounded-lg">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold">Izoh:</span> Algoritm — bu
-                    ko'rsatmalar majmuasi bo'lib, ma'lumotlar tuzilmasi emas.
-                  </p>
-                </div>
               </div>
 
-              <div className="bg-green-500/10 dark:bg-green-500/20 p-6 rounded-xl border border-green-500/20">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
-                  Savol 2
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-2">
-                  Sizning javobingiz:{" "}
-                  <span className="font-semibold text-green-600 dark:text-green-400">
-                    To'g'ri (To'g'ri)
-                  </span>
-                </p>
-                <div className="p-3 bg-white/50 dark:bg-background-dark/50 rounded-lg">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold">Izoh:</span> Ikkilik qidiruv
-                    elementlarni samarali topish uchun saralangan massivni talab
-                    qiladi.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-green-500/10 dark:bg-green-500/20 p-6 rounded-xl border border-green-500/20">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
-                  Savol 3
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-2">
-                  Sizning javobingiz:{" "}
-                  <span className="font-semibold text-green-600 dark:text-green-400">
-                    [Foydalanuvchi javobi] (To'g'ri)
-                  </span>
-                </p>
-                <div className="p-3 bg-white/50 dark:bg-background-dark/50 rounded-lg">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold">Izoh:</span> Rekursiya — bu
-                    funksiya muammoning kichikroq nusxalarini hal qilish uchun
-                    o'zini chaqiradi. Misol: faktoriyal hisoblash.
-                  </p>
-                </div>
+              <div className="space-y-8">
+                {questions.map((q, idx) => {
+                  const selectedId = selections[q.id];
+                  const selected = (q.options || []).find((o) => o.id === selectedId);
+                  const correct = (q.options || []).find((o) => o.isCorrect);
+                  const isCorrect = !!(selected && selected.isCorrect);
+                  return (
+                    <div
+                      key={q.id}
+                      className={`${isCorrect ? "bg-green-500/10 dark:bg-green-500/20 border border-green-500/20" : "bg-red-500/10 dark:bg-red-500/20 border border-red-500/20"} p-6 rounded-xl`}
+                    >
+                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Savol {idx + 1}</h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-2">
+                        Sizning javobingiz: {" "}
+                        <span className={`font-semibold ${isCorrect ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
+                          {selected ? selected.text : "Tanlanmagan"} {isCorrect ? "(To'g'ri)" : "(Noto'g'ri)"}
+                        </span>
+                      </p>
+                      {!isCorrect && correct && (
+                        <p className="text-gray-600 dark:text-gray-300 mb-3">
+                          To'g'ri javob: {" "}
+                          <span className="font-semibold text-green-600 dark:text-green-400">{correct.text}</span>
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          </div>
+          )}
 
           <div className="mt-16 pt-10 border-t border-gray-200 dark:border-gray-700">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
@@ -371,10 +290,10 @@ const Tests = () => {
                   </div>
                   <div className="text-right">
                     <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">
-                      80%
+                      {submitted ? `${percent}%` : `${progress}%`}
                     </p>
                     <p className="text-sm font-medium text-green-600 dark:text-green-400">
-                      +10%
+                      {submitted ? `${score}/${total}` : `${answered}/${total}`}
                     </p>
                   </div>
                 </div>
@@ -425,14 +344,14 @@ const Tests = () => {
                 <h3 className="text-base font-semibold text-gray-600 dark:text-gray-300 mb-2">
                   O'rtacha ball
                 </h3>
-                <p className="text-3xl font-bold text-primary">85%</p>
+                <p className="text-3xl font-bold text-primary">{submitted ? `${percent}%` : `0%`}</p>
               </div>
 
               <div className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
                 <h3 className="text-base font-semibold text-gray-600 dark:text-gray-300 mb-2">
                   Muvaffaqiyat darajasi
                 </h3>
-                <p className="text-3xl font-bold text-primary">75%</p>
+                <p className="text-3xl font-bold text-primary">{submitted ? `${percent}%` : `0%`}</p>
               </div>
 
               <div className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">

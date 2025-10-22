@@ -1,8 +1,37 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { assignmentsData } from "../data/assignments";
 const Assignments = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const badgeFor = (status, due) => {
+    if (status === "submitted")
+      return {
+        text: "Yuborilgan",
+        cls: "text-green-600 bg-green-100 dark:bg-green-900/50 dark:text-green-400",
+      };
+    if (status === "reviewing")
+      return {
+        text: "Ko'rib chiqilmoqda",
+        cls: "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/50 dark:text-yellow-400",
+      };
+    if (status === "done")
+      return {
+        text: "Ko'rib chiqildi",
+        cls: "text-blue-600 bg-blue-100 dark:bg-blue-900/50 dark:text-blue-400",
+      };
+    return {
+      text: due ? `Muddat: ${new Date(due).toLocaleDateString("uz-UZ", { day: "2-digit", month: "long" })}` : "Muddat yo'q",
+      cls: "text-red-500 bg-red-100 dark:bg-red-900/50 dark:text-red-400",
+    };
+  };
+
+  const progressFor = (status) => {
+    if (status === "submitted") return { w: "w-1/4", color: "bg-green-500" };
+    if (status === "reviewing") return { w: "w-2/4", color: "bg-yellow-500" };
+    if (status === "done") return { w: "w-full", color: "bg-primary" };
+    return { w: "w-0", color: "bg-green-500" };
+  };
   return (
     <div className="relative flex min-h-screen w-full flex-col">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
@@ -93,7 +122,7 @@ const Assignments = () => {
         {isMenuOpen && (
           <div className="lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
             <a
-              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
               href="/"
             >
               Bosh sahifa
@@ -117,7 +146,7 @@ const Assignments = () => {
               Testlar
             </a>
             <a
-              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
               href="/assignments"
             >
               Topshiriqlar
@@ -130,13 +159,13 @@ const Assignments = () => {
             </a>
             <a
               href="/about"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Biz haqimizda</span>
             </a>
             <a
               href="/contact"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Bog'lanish</span>
             </a>
@@ -167,183 +196,58 @@ const Assignments = () => {
             </nav>
           </div>
           <div className="space-y-12">
-            <section className="space-y-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Matematika
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white dark:bg-background-dark/50 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-base font-bold text-gray-800 dark:text-gray-200">
-                          Algebra I - 3-bo'lim takrorlashi
-                        </h3>
-                        <span className="text-xs font-medium text-red-500 bg-red-100 dark:bg-red-900/50 dark:text-red-400 px-2 py-1 rounded-full">
-                          Muddat: 28-oktabr
-                        </span>
+            {assignmentsData.map((section) => (
+              <section key={section.subject} className="space-y-6">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {section.subject}
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {section.items.map((item) => {
+                    const badge = badgeFor(item.status, item.due);
+                    const pg = progressFor(item.status);
+                    return (
+                      <div key={item.id} className="bg-white dark:bg-background-dark/50 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
+                        <div className="p-6 flex-1 flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center justify-between mb-2">
+                              <h3 className="text-base font-bold text-gray-800 dark:text-gray-200">
+                                {item.title}
+                              </h3>
+                              <span className={`text-xs font-medium px-2 py-1 rounded-full ${badge.cls}`}>
+                                {badge.text}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                              DOCX faylini yuklab olib ko'ring va topshirig'ingizni tayyorlang.
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <a
+                              href={item.href}
+                              download
+                              className="inline-flex items-center gap-2 text-sm font-semibold text-gray-800 bg-primary py-2 px-4 rounded-lg hover:bg-primary/90 transition-shadow shadow-sm hover:shadow-md"
+                            >
+                              <span className="material-symbols-outlined text-base">download</span>
+                              <span>DOCX yuklab olish</span>
+                            </a>
+                            <a
+                              href={item.href}
+                              className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                            >
+                              <span className="material-symbols-outlined text-base">visibility</span>
+                              <span>Ko'rish</span>
+                            </a>
+                          </div>
+                        </div>
+                        <div className="h-2 bg-gray-200 dark:bg-gray-700">
+                          <div className={`h-2 ${pg.color} ${pg.w}`}></div>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        3-bo'limdagi chiziqli tenglamalar va tengsizliklar
-                        bo'yicha takrorlash mashqlari.
-                      </p>
-                    </div>
-                    <button className="self-start flex items-center gap-2 text-sm font-semibold text-gray-800 bg-primary py-2 px-4 rounded-lg hover:bg-primary/90 transition-shadow shadow-sm hover:shadow-md">
-                      <span className="material-symbols-outlined text-base">
-                        upload_file
-                      </span>
-                      <span>Topshiriqni yuborish</span>
-                    </button>
-                  </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700">
-                    <div className="h-2 bg-green-500 w-1/4"></div>
-                  </div>
+                    );
+                  })}
                 </div>
-                <div className="bg-white dark:bg-background-dark/50 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-base font-bold text-gray-800 dark:text-gray-200">
-                          Geometriya - Isbotlash mashqlari
-                        </h3>
-                        <span className="text-xs font-medium text-green-600 bg-green-100 dark:bg-green-900/50 dark:text-green-400 px-2 py-1 rounded-full">
-                          Yuborilgan
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        Uchburchaklar va to'rtburchaklar uchun geometriya
-                        isbotlarini yozish mashqlari.
-                      </p>
-                    </div>
-                    <button className="self-start flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                      <span className="material-symbols-outlined text-base">
-                        task_alt
-                      </span>
-                      <span>Yuborilgan nusxani ko'rish</span>
-                    </button>
-                  </div>
-                  <div className="h-2 bg-green-500"></div>
-                </div>
-              </div>
-            </section>
-            <section className="space-y-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Fan
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white dark:bg-background-dark/50 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-base font-bold text-gray-800 dark:text-gray-200">
-                          Biologiya - Hujayra tuzilishi
-                        </h3>
-                        <span className="text-xs font-medium text-yellow-600 bg-yellow-100 dark:bg-yellow-900/50 dark:text-yellow-400 px-2 py-1 rounded-full">
-                          Ko'rib chiqilmoqda
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        Hujayra qismlarini chizish va ularning funksiyalarini
-                        tavsiflash.
-                      </p>
-                    </div>
-                    <button className="self-start flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                      <span className="material-symbols-outlined text-base">
-                        hourglass_top
-                      </span>
-                      <span>Baholanishni kutmoqda</span>
-                    </button>
-                  </div>
-                  <div className="h-2 bg-yellow-500"></div>
-                </div>
-                <div className="bg-white dark:bg-background-dark/50 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-base font-bold text-gray-800 dark:text-gray-200">
-                          Chemistry - Periodic Table
-                        </h3>
-                        <span className="text-xs font-medium text-red-500 bg-red-100 dark:bg-red-900/50 dark:text-red-400 px-2 py-1 rounded-full">
-                          Muddat: 5-noyabr
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        Elementlar va ularning xususiyatlari haqida batafsil
-                        o'quv qo'llanmasi yarating.
-                      </p>
-                    </div>
-                    <button className="self-start flex items-center gap-2 text-sm font-semibold text-gray-800 bg-primary py-2 px-4 rounded-lg hover:bg-primary/90 transition-shadow shadow-sm hover:shadow-md">
-                      <span className="material-symbols-outlined text-base">
-                        upload_file
-                      </span>
-                      <span>Topshiriqni yuborish</span>
-                    </button>
-                  </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700">
-                    <div className="h-2 bg-green-500 w-0"></div>
-                  </div>
-                </div>
-              </div>
-            </section>
-            <section className="space-y-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Tarix
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white dark:bg-background-dark/50 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-base font-bold text-gray-800 dark:text-gray-200">
-                          Jahon tarixi - Uyg'onish davri san'ati
-                        </h3>
-                        <span className="text-xs font-medium text-blue-600 bg-blue-100 dark:bg-blue-900/50 dark:text-blue-400 px-2 py-1 rounded-full">
-                          Ko'rib chiqildi
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        Mashhur Uyg'onish davri rassomi haqida tadqiqot
-                        o'tkazing va hisobot yozing.
-                      </p>
-                    </div>
-                    <button className="self-start flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-                      <span className="material-symbols-outlined text-base">
-                        rate_review
-                      </span>
-                      <span>Fikr-mulohazalarni ko'rish</span>
-                    </button>
-                  </div>
-                  <div className="h-2 bg-primary/70"></div>
-                </div>
-                <div className="bg-white dark:bg-background-dark/50 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-base font-bold text-gray-800 dark:text-gray-200">
-                          AQSh tarixi - Fuqarolar urushi sabablari
-                        </h3>
-                        <span className="text-xs font-medium text-red-500 bg-red-100 dark:bg-red-900/50 dark:text-red-400 px-2 py-1 rounded-full">
-                          Muddat: 12-noyabr
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        Amerika Fuqarolar urushiga olib kelgan asosiy omillarni
-                        tahlil qiling.
-                      </p>
-                    </div>
-                    <button className="self-start flex items-center gap-2 text-sm font-semibold text-gray-800 bg-primary py-2 px-4 rounded-lg hover:bg-primary/90 transition-shadow shadow-sm hover:shadow-md">
-                      <span className="material-symbols-outlined text-base">
-                        upload_file
-                      </span>
-                      <span>Topshiriqni yuborish</span>
-                    </button>
-                  </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700">
-                    <div className="h-2 bg-green-500 w-0"></div>
-                  </div>
-                </div>
-              </div>
-            </section>
+              </section>
+            ))}
           </div>
         </div>
       </main>
@@ -351,6 +255,7 @@ const Assignments = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-sm text-gray-500 dark:text-gray-400">
+              2025 SoloStudy. Barcha huquqlar himoyalangan.
               © 2025 SoloStudy. Barcha huquqlar himoyalangan.
             </p>
             <div className="flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-300">

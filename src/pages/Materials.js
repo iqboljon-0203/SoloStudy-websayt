@@ -1,8 +1,120 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { supabase } from "../lib/supabaseClient";
+import { staticPptx } from "../data/staticPptx";
+
 const Materials = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [materials, setMaterials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [subj, setSubj] = useState("");
+  const [topic, setTopic] = useState("");
+  const [level, setLevel] = useState("");
+
+  const subjects = useMemo(() => {
+    const s = Array.from(new Set(staticPptx.map((x) => x.subject).filter(Boolean)));
+    return s.sort();
+  }, []);
+  const topics = useMemo(() => {
+    const s = Array.from(new Set(staticPptx.map((x) => x.topic).filter(Boolean)));
+    return s.sort();
+  }, []);
+  const levels = useMemo(() => {
+    const s = Array.from(new Set(staticPptx.map((x) => x.level).filter(Boolean)));
+    return s.sort();
+  }, []);
+  const filteredStatic = useMemo(() => {
+    return staticPptx.filter((x) => (!subj || x.subject === subj) && (!topic || x.topic === topic) && (!level || x.level === level));
+  }, [subj, topic, level]);
+
+  const downloadFile = async (materialId) => {
+    try {
+      const material = materials.find((m) => m.id === materialId);
+      if (!material?.storage_path) return;
+
+      const { data, error } = await supabase.storage
+        .from("materials")
+        .download(material.storage_path);
+
+      if (error) throw error;
+
+      // Create blob URL and trigger download
+      const blob = new Blob([data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = material.storage_path.split("/").pop(); // Use original filename
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (error) {
+      console.error("Yuklashda xatolik:", error.message);
+      setError("Faylni yuklab olishda xatolik yuz berdi");
+    }
+  };
+
+  const uploadFile = async (file) => {
+    try {
+      setUploading(true);
+
+      // Generate a unique file path
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random().toString(36).slice(2)}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      // Upload file to storage
+      const { error: uploadError } = await supabase.storage
+        .from("materials")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Create database entry
+      const { error: dbError } = await supabase.from("materials").insert([
+        {
+          title: file.name.split(".")[0], // Use filename as title
+          storage_path: filePath,
+          file_type: fileExt.toUpperCase(),
+          file_size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+          created_at: new Date().toISOString(),
+        },
+      ]);
+
+      if (dbError) throw dbError;
+
+      // Refresh materials list
+      fetchMaterials();
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const fetchMaterials = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("materials")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setMaterials(data || []);
+    } catch (error) {
+      setError(error.message || "Xato yuz berdi");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
       {/* Header */}
@@ -67,7 +179,7 @@ const Materials = () => {
             </a>
           </nav>
 
-              <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <a
               href="/about"
               className="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all hover:shadow-lg bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
@@ -94,13 +206,13 @@ const Materials = () => {
         {isMenuOpen && (
           <div className="lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
             <a
-              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
               href="/"
             >
               Bosh sahifa
             </a>
             <a
-              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
               href="/materials"
             >
               Materiallar
@@ -131,13 +243,13 @@ const Materials = () => {
             </a>
             <a
               href="/about"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Biz haqimizda</span>
             </a>
             <a
               href="/contact"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Bog'lanish</span>
             </a>
@@ -156,259 +268,148 @@ const Materials = () => {
           </p>
 
           {/* Filters */}
-          <div className="flex flex-wrap gap-4 mb-8">
-            <div className="relative">
-              <button className="flex items-center gap-2 bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                <span>Fan</span>
-                <span className="material-symbols-outlined text-base">
-                  expand_more
-                </span>
-              </button>
-            </div>
-            <div className="relative">
-              <button className="flex items-center gap-2 bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                <span>Mavzu</span>
-                <span className="material-symbols-outlined text-base">
-                  expand_more
-                </span>
-              </button>
-            </div>
-            <div className="relative">
-              <button className="flex items-center gap-2 bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                <span>Daraja</span>
-                <span className="material-symbols-outlined text-base">
-                  expand_more
-                </span>
-              </button>
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+            <div className="flex flex-wrap gap-4">
+              <div className="relative">
+                <select
+                  value={subj}
+                  onChange={(e) => setSubj(e.target.value)}
+                  className="bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <option value="">Fan (barchasi)</option>
+                  {subjects.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="relative">
+                <select
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                  className="bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <option value="">Mavzu (barchasi)</option>
+                  {topics.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="relative">
+                <select
+                  value={level}
+                  onChange={(e) => setLevel(e.target.value)}
+                  className="bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <option value="">Daraja (barchasi)</option>
+                  {levels.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
+
+          {filteredStatic.length > 0 && (
+            <div className="mb-12">
+             
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                {filteredStatic.map((sp) => (
+                  <div key={sp.id} className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
+                    <div className="relative p-4 flex-grow flex flex-col justify-between">
+                      <div>
+                        <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
+                          <span className="material-symbols-outlined text-primary text-4xl">slideshow</span>
+                        </div>
+                        <h3 className="font-bold text-gray-900 dark:text-white mb-1">{sp.title}</h3>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">PPTX</p>
+                      </div>
+                      <a
+                        href={sp.href}
+                        download
+                        className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm"
+                      >
+                        <span className="material-symbols-outlined text-base">download</span>
+                        Yuklab olish
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {filteredStatic.length === 0 && (
+            <div className="mb-12 text-center text-gray-500 dark:text-gray-400">Tanlangan filtrlar bo'yicha fayllar topilmadi.</div>
+          )}
 
           {/* Materials Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {/* Material Card 1 */}
-            <div className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-              <div className="relative p-4 flex-grow flex flex-col justify-between">
-                <div>
-                  <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                    <span className="material-symbols-outlined text-primary text-4xl">
-                      description
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-                    Yuqori Matematika
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                    Dr. Eleanor Vance
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    PDF - 5.2 MB
-                  </p>
-                </div>
-                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
-                  <span className="material-symbols-outlined text-base">
-                    download
-                  </span>
-                  Yuklab olish
-                </button>
+          {loading ? (
+            <div className="col-span-full flex items-center justify-center py-20">
+              <div className="text-center">
+                <div className="loader mb-4 mx-auto" />
+                <p className="text-gray-600 dark:text-gray-400">
+                  Yuklanmoqda...
+                </p>
               </div>
             </div>
-
-            {/* Material Card 2 */}
-            <div className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-              <div className="relative p-4 flex-grow flex flex-col justify-between">
-                <div>
-                  <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                    <span className="material-symbols-outlined text-primary text-4xl">
-                      slideshow
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-                    Kvant Fizikasiga Kirish
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                    Prof. Samuel Reed
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    PPT - 12.8 MB
-                  </p>
-                </div>
-                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
-                  <span className="material-symbols-outlined text-base">
-                    download
-                  </span>
-                  Yuklab olish
-                </button>
-              </div>
+          ) : error ? (
+            <div className="col-span-full text-center text-red-500 py-10">
+              {error}
             </div>
-
-            {/* Material Card 3 */}
-            <div className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-              <div className="relative p-4 flex-grow flex flex-col justify-between">
-                <div>
-                  <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                    <span className="material-symbols-outlined text-primary text-4xl">
-                      edit_document
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-                    Organik Kimyo
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                    Dr. Olivia Bennett
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    DOCX - 2.1 MB
-                  </p>
-                </div>
-                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
-                  <span className="material-symbols-outlined text-base">
-                    download
-                  </span>
-                  Yuklab olish
-                </button>
-              </div>
+          ) : materials.length === 0 ? (
+            <div className="col-span-full text-center text-gray-500 py-10">
+              Materiallar topilmadi.
             </div>
-
-            {/* Material Card 4 */}
-            <div className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-              <div className="relative p-4 flex-grow flex flex-col justify-between">
-                <div>
-                  <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                    <span className="material-symbols-outlined text-primary text-4xl">
-                      description
-                    </span>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {materials.map((m) => (
+                <div
+                  key={m.id}
+                  className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col"
+                >
+                  <div className="relative p-4 flex-grow flex flex-col justify-between">
+                    <div>
+                      <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
+                        <span className="material-symbols-outlined text-primary text-4xl">
+                          {m.file_type &&
+                          m.file_type.toLowerCase().includes("pdf")
+                            ? "description"
+                            : m.file_type &&
+                                m.file_type.toLowerCase().includes("ppt")
+                              ? "slideshow"
+                              : m.file_type &&
+                                  (m.file_type.toLowerCase().includes("doc") ||
+                                    m.file_type.toLowerCase().includes("docx"))
+                                ? "edit_document"
+                                : "description"}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-gray-900 dark:text-white mb-1">
+                        {m.title}
+                      </h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                        {m.author || "Noma'lum muallif"}
+                      </p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">
+                        {m.file_type
+                          ? `${m.file_type.toUpperCase()}${m.file_size ? ` - ${m.file_size}` : ""}`
+                          : ""}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => downloadFile(m.id)}
+                      disabled={!m.storage_path}
+                      className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <span className="material-symbols-outlined text-base">
+                        download
+                      </span>
+                      {uploading ? "Yuklanmoqda..." : "Yuklab olish"}
+                    </button>
                   </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-                    Adabiy Tahlil
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                    Prof. Ethan Carter
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    PDF - 1.8 MB
-                  </p>
                 </div>
-                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
-                  <span className="material-symbols-outlined text-base">
-                    download
-                  </span>
-                  Yuklab olish
-                </button>
-              </div>
+              ))}
             </div>
-
-            {/* Material Card 5 */}
-            <div className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-              <div className="relative p-4 flex-grow flex flex-col justify-between">
-                <div>
-                  <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                    <span className="material-symbols-outlined text-primary text-4xl">
-                      description
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-                    Jahon Tarixi
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                    Dr. Sophia Hayes
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    PDF - 8.5 MB
-                  </p>
-                </div>
-                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
-                  <span className="material-symbols-outlined text-base">
-                    download
-                  </span>
-                  Yuklab olish
-                </button>
-              </div>
-            </div>
-
-            {/* Material Card 6 */}
-            <div className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-              <div className="relative p-4 flex-grow flex flex-col justify-between">
-                <div>
-                  <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                    <span className="material-symbols-outlined text-primary text-4xl">
-                      slideshow
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-                    Algoritmlar
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                    Prof. Daniel Morgan
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    PPT - 6.3 MB
-                  </p>
-                </div>
-                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
-                  <span className="material-symbols-outlined text-base">
-                    download
-                  </span>
-                  Yuklab olish
-                </button>
-              </div>
-            </div>
-
-            {/* Material Card 7 */}
-            <div className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-              <div className="relative p-4 flex-grow flex flex-col justify-between">
-                <div>
-                  <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                    <span className="material-symbols-outlined text-primary text-4xl">
-                      edit_document
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-                    Statistika
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                    Dr. Chloe Foster
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    DOCX - 0.5 MB
-                  </p>
-                </div>
-                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
-                  <span className="material-symbols-outlined text-base">
-                    download
-                  </span>
-                  Yuklab olish
-                </button>
-              </div>
-            </div>
-
-            {/* Material Card 8 */}
-            <div className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-              <div className="relative p-4 flex-grow flex flex-col justify-between">
-                <div>
-                  <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                    <span className="material-symbols-outlined text-primary text-4xl">
-                      description
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-                    Iqtisodiyot Asoslari
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                    Prof. Noah Turner
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    PDF - 3.1 MB
-                  </p>
-                </div>
-                <button className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm">
-                  <span className="material-symbols-outlined text-base">
-                    download
-                  </span>
-                  Yuklab olish
-                </button>
-              </div>
-            </div>
-          </div>
+          )}
 
           {/* Pagination */}
           <div className="flex justify-center items-center mt-12 space-x-2">

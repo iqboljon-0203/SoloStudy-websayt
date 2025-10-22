@@ -1,11 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { videos } from "../data/videos";
 const Videos = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toEmbed = (url) => {
+    if (!url) return "";
+    try {
+      const u = new URL(url);
+      if (u.hostname === "youtu.be") {
+        return `https://www.youtube.com/embed/${u.pathname.slice(1)}`;
+      }
+      if (u.hostname.includes("youtube.com")) {
+        const v = u.searchParams.get("v");
+        if (v) return `https://www.youtube.com/embed/${v}`;
+      }
+      return url;
+    } catch {
+      return url;
+    }
+  };
+  const qrFor = (url) => `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(url)}`;
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
-      {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm mb-4">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
@@ -94,7 +111,7 @@ const Videos = () => {
         {isMenuOpen && (
           <div className="lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
             <a
-              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
               href="/"
             >
               Bosh sahifa
@@ -106,7 +123,7 @@ const Videos = () => {
               Materiallar
             </a>
             <a
-              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
               href="/videos"
             >
               Videolar
@@ -131,13 +148,13 @@ const Videos = () => {
             </a>
             <a
               href="/about"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Biz haqimizda</span>
             </a>
             <a
               href="/contact"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Bog'lanish</span>
             </a>
@@ -146,157 +163,35 @@ const Videos = () => {
       </header>
 
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="bg-background-light dark:bg-background-dark rounded-xl shadow-lg overflow-hidden">
-              <div className="relative aspect-video">
-                <img
-                  alt="Video thumbnail"
-                  className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2HByAbGDch1E3h_5vtzRZ9nfZgO9k9aL47gb_WE3S1dVx-JiXMYG5XER6_6-vlDTiSKtji-xRLJ2dKCjGzjnOunmxKmE61Yl3TsjfQWEMW7FprHvrQAxrOWKU3r6YuVf-wVC79N2akk19Jni__kh0LLmLIHeGi6CRpoJnSY8TNuQdnGpg-B4fD9ukni09Yc0P8pTtdCvf6f2AhUO42JLq_COTvWAjeYws4uvfs_91R6_AhflMfuhU2uFeC75Yj79KPV8F36Jqr3Q"
-                />
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  <button className="w-20 h-20 rounded-full bg-primary/80 text-background-dark flex items-center justify-center hover:bg-primary transition-transform transform hover:scale-110">
-                    <span className="material-symbols-outlined text-5xl">
-                      play_arrow
-                    </span>
-                  </button>
+        <div className="grid grid-cols-1 gap-8">
+          {videos.map((v) => (
+            <div key={v.id} className="bg-background-light dark:bg-background-dark rounded-xl shadow-lg overflow-hidden">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                <div className="lg:col-span-2">
+                  <div className="aspect-video w-full">
+                    <iframe
+                      className="w-full h-full"
+                      src={toEmbed(v.url)}
+                      title={v.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                </div>
+                <div className="p-6 flex flex-col items-center justify-center gap-4">
+                  <h3 className="text-lg font-semibold text-background-dark dark:text-background-light text-center">QR orqali oching</h3>
+                  <div className="bg-white p-3 rounded-lg">
+                    <img alt="QR Code" className="w-40 h-40" src={qrFor(v.url)} />
+                  </div>
                 </div>
               </div>
               <div className="p-6">
-                <h1 className="text-2xl font-bold text-background-dark dark:text-background-light mb-2">
-                  Yuqori matematika: Mukammal qo'llanma
-                </h1>
-                <p className="text-background-dark/70 dark:text-background-light/70 text-sm mb-6">
-                  Bu video yuqori matematika bo'yicha batafsil ma'lumot beradi,
-                  asosiy tushunchalar va murakkab usullarni qamrab oladi.
-                  Murakkab masalalarni qadam-baqadam tushuntirishlar va hayotiy
-                  misollar orqali yechishni o'rganing.
-                </p>
-                <h3 className="text-lg font-semibold text-background-dark dark:text-background-light mb-4">
-                  O'quv maqsadlari
-                </h3>
-                <div className="space-y-3 mb-6">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      className="h-5 w-5 rounded border-background-dark/20 dark:border-background-light/20 bg-transparent text-primary focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark"
-                      type="checkbox"
-                    />
-                    <span className="text-background-dark dark:text-background-light">
-                      Differensial va integral hisoblashning asoslarini
-                      tushunish
-                    </span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      className="h-5 w-5 rounded border-background-dark/20 dark:border-background-light/20 bg-transparent text-primary focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark"
-                      type="checkbox"
-                    />
-                    <span className="text-background-dark dark:text-background-light">
-                      Optimizatsiya masalalarini hal qilish uchun yuqori
-                      matematikani qo'llash
-                    </span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      className="h-5 w-5 rounded border-background-dark/20 dark:border-background-light/20 bg-transparent text-primary focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark"
-                      type="checkbox"
-                    />
-                    <span className="text-background-dark dark:text-background-light">
-                      Yuqori matematika yordamida funksiyalar va ularning
-                      xususiyatlarini tahlil qilish
-                    </span>
-                  </label>
-                </div>
-                <button className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg text-background-dark bg-primary/50 dark:bg-primary/50 hover:bg-primary/70 dark:hover:bg-primary/70 transition-colors">
-                  <span className="material-symbols-outlined text-base">
-                    favorite
-                  </span>
-                  <span>Sevimlilarga qo'shish</span>
-                </button>
+                <h2 className="text-xl font-bold text-background-dark dark:text-background-light mb-2">{v.title}</h2>
+                <p className="text-background-dark/70 dark:text-background-light/70 text-sm">{v.description}</p>
               </div>
             </div>
-          </div>
-
-          <div className="space-y-6">
-            <div className="bg-background-light dark:bg-background-dark p-6 rounded-xl shadow-lg flex flex-col items-center text-center">
-              <h3 className="text-lg font-semibold text-background-dark dark:text-background-light mb-4">
-                Ko'rish uchun skanerlang
-              </h3>
-              <div className="bg-white p-2 rounded-lg">
-                <img
-                  alt="QR Code"
-                  className="w-32 h-32"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf6u9QK8h_VawTvuQK4N7hexr2v6nkvuo9k3eAvwNt7105N1RsXKJt5fIaZ5PFGtr1emcQB2ugJJbvDPNeU1_OgavdFzTyomCTlhmpfNaUgcTAXPe2TF3Q4yIeDhxdoYgFY0MA9Vfy9stXpU5DjHho9rRw18EMOOSJzy2I0lP2JwG6DDRgNE8gv9HzA3kvIHvE0TjAg7i2YKMaLU7RvW7lhlbgJMr2o0cLttQQhc9iGEZfqM_TIw92R0c8AheWBEnGIuV_5wBSvuk"
-                />
-              </div>
-              <p className="text-xs text-background-dark/60 dark:text-background-light/60 mt-3">
-                Mobil qurilmangizda oching
-              </p>
-            </div>
-
-            <h3 className="text-xl font-bold text-background-dark dark:text-background-light mt-8 lg:mt-0">
-              O'xshash videolar
-            </h3>
-            <div className="space-y-4">
-              <a
-                className="flex items-center gap-4 group bg-background-light dark:bg-background-dark p-3 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                href="/videos"
-              >
-                <img
-                  alt="Related video thumbnail"
-                  className="w-24 h-16 object-cover rounded-md flex-shrink-0"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaEQP_ot1eQGnBTFsBVfsoXVdIR5DcE_74af2ziYsNN702_IGDLU8XJPtHhpSu2aGTxAqpTNhvcUaYxIsK7RkOHZyVZ6bDfGdW7qMzBtJcFMJJ_s41RVzYahmfOXsE07p2v9xI2kFSqYuPKig46_LqDVYI46fyEfsaCaLPX6ASaB7c2N02dwJz_Xx6sQXjrprnT_zlSxE6U1LBavhmI0Vt5b8Xe6HvyUV4u6H2ArvsuyCYcA2rf90X1flWq-X486OM63BWdGwr8gI"
-                />
-                <div>
-                  <h4 className="font-semibold text-background-dark dark:text-background-light group-hover:text-primary transition-colors">
-                    Algebra asoslari
-                  </h4>
-                  <p className="text-sm text-background-dark/70 dark:text-background-light/70">
-                    Asosiy tushunchalar
-                  </p>
-                </div>
-              </a>
-
-              <a
-                className="flex items-center gap-4 group bg-background-light dark:bg-background-dark p-3 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                href="/videos"
-              >
-                <img
-                  alt="Related video thumbnail"
-                  className="w-24 h-16 object-cover rounded-md flex-shrink-0"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCr7XHLYPTgYocL9VtwSX41xRMCo_Y95Q80gUh7o_3NDilf7jzOTJBlYLsKgx2YxFVRuPKblTe9PEY9rrzVA0o2T1iehyJPUqy_KacbJ44riFZ_d0w_Oqbh89BKC1s_gB8GG_bw4RR6F4H1eYdb0vZHdnfuhmTlEsSqZccU2lTTs9fi1d_90IIt1JjvDTGX9I9_27SrDmtZ2_DkCdRbzWva_FvItiPKaThTFOSIJiBiSZcv-QuqXUSgEoxj0o89SE1OgmZpwWn9Pmo"
-                />
-                <div>
-                  <h4 className="font-semibold text-background-dark dark:text-background-light group-hover:text-primary transition-colors">
-                    Kimyoviy reaktsiyalar
-                  </h4>
-                  <p className="text-sm text-background-dark/70 dark:text-background-light/70">
-                    Kimyo qonunlari
-                  </p>
-                </div>
-              </a>
-
-              <a
-                className="flex items-center gap-4 group bg-background-light dark:bg-background-dark p-3 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                href="/videos"
-              >
-                <img
-                  alt="Related video thumbnail"
-                  className="w-24 h-16 object-cover rounded-md flex-shrink-0"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWKS5c2O7z_oNEyIRSF7SLP33INJWJQlan4FSNTPNL0fUCRLjwfRI1TV86Jp_VEwJcsneZ-110oWUiUh3yg8u8cWEENbqKpNpewnpv9uzEUVmahymS4Fx-Y0-dEsoGIoC8HdjoBz439CIvnKpmOo-l6c6Su6eQXHrLdfoPQ--DCCoMPVdrkXrJx6rfZFYLv9QnVKw8erf1Qqar6Ao11yEz94WABvb_FU2d652VvBM5wax5z1D2nmJnz-1nhLZePBopSQzH1yLGeKE"
-                />
-                <div>
-                  <h4 className="font-semibold text-background-dark dark:text-background-light group-hover:text-primary transition-colors">
-                    Mexanika va harakat
-                  </h4>
-                  <p className="text-sm text-background-dark/70 dark:text-background-light/70">
-                    Harakat qonunlari
-                  </p>
-                </div>
-              </a>
-            </div>
-          </div>
+          ))}
         </div>
       </main>
 

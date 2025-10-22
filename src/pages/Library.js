@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { libraryFiles } from "../data/libraryFiles";
 const Library = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [author, setAuthor] = useState("");
+    const [title, setTitle] = useState("");
+    const [topic, setTopic] = useState("");
+    const [year, setYear] = useState("");
+    const [q, setQ] = useState("");
+
+    const authors = useMemo(() => Array.from(new Set(libraryFiles.map(f => f.author).filter(Boolean))).sort(), []);
+    const titles = useMemo(() => Array.from(new Set(libraryFiles.map(f => f.title).filter(Boolean))).sort(), []);
+    const topics = useMemo(() => Array.from(new Set(libraryFiles.map(f => f.topic).filter(Boolean))).sort(), []);
+    const years = useMemo(() => Array.from(new Set(libraryFiles.map(f => f.year).filter(Boolean))).sort((a,b)=>a-b), []);
+    const filtered = useMemo(() => {
+      const qlc = q.trim().toLowerCase();
+      return libraryFiles.filter(f =>
+        (!author || f.author === author) &&
+        (!title || f.title === title) &&
+        (!topic || f.topic === topic) &&
+        (!year || String(f.year) === String(year)) &&
+        (!qlc || [f.author, f.title, f.topic, f.subject].filter(Boolean).some(x => String(x).toLowerCase().includes(qlc)))
+      );
+    }, [author, title, topic, year, q]);
   return (
     <div className="relative flex min-h-screen w-full flex-col">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
@@ -93,7 +113,7 @@ const Library = () => {
         {isMenuOpen && (
           <div className="lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
             <a
-              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
               href="/"
             >
               Bosh sahifa
@@ -123,20 +143,20 @@ const Library = () => {
               Topshiriqlar
             </a>
             <a
-              className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
+              className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
               href="/library"
             >
               Kutubxona
             </a>
             <a
               href="/about"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Biz haqimizda</span>
             </a>
             <a
               href="/contact"
-              className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Bog'lanish</span>
             </a>
@@ -163,138 +183,63 @@ const Library = () => {
               <input
                 className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-background-dark dark:text-background-light focus:outline-none focus:ring-2 focus:ring-primary border-none bg-background-light/70 dark:bg-background-dark/70 h-12 placeholder:text-background-dark/60 dark:placeholder:text-background-light/60 pl-12 pr-4 text-base font-normal leading-normal"
                 placeholder="Muallif, sarlavha, mavzu yoki yil bo'yicha qidiring"
+                value={q}
+                onChange={(e)=>setQ(e.target.value)}
               />
             </div>
           </div>
           <div className="flex gap-3 p-4 flex-wrap">
-            <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 dark:bg-primary/30 pl-4 pr-3 text-primary hover:bg-primary/30 dark:hover:bg-primary/40 transition-colors">
-              <p className="text-sm font-medium leading-normal text-blue-900">
-                Muallif
-              </p>
-              <span className="material-symbols-outlined text-blue-900">
-                expand_more
-              </span>
-            </button>
-            <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-background-light/70 dark:bg-background-dark/70 pl-4 pr-3 text-background-dark/80 dark:text-background-light/80 hover:bg-background-light/90 dark:hover:bg-background-dark/90 transition-colors">
-              <p className="text-sm font-medium leading-normal">Sarlavha</p>
-              <span className="material-symbols-outlined">expand_more</span>
-            </button>
-            <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-background-light/70 dark:bg-background-dark/70 pl-4 pr-3 text-background-dark/80 dark:text-background-light/80 hover:bg-background-light/90 dark:hover:bg-background-dark/90 transition-colors">
-              <p className="text-sm font-medium leading-normal">Mavzu</p>
-              <span className="material-symbols-outlined">expand_more</span>
-            </button>
-            <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-background-light/70 dark:bg-background-dark/70 pl-4 pr-3 text-background-dark/80 dark:text-background-light/80 hover:bg-background-light/90 dark:hover:bg-background-dark/90 transition-colors">
-              <p className="text-sm font-medium leading-normal">Yil</p>
-              <span className="material-symbols-outlined">expand_more</span>
-            </button>
+            <select value={author} onChange={(e)=>setAuthor(e.target.value)} className="h-10 rounded-lg bg-primary/20 dark:bg-primary/30 pl-4 pr-3 text-primary hover:bg-primary/30 dark:hover:bg-primary/40 transition-colors">
+              <option value="">Muallif (barchasi)</option>
+              {authors.map(a=> <option key={a} value={a}>{a}</option>)}
+            </select>
+            <select value={title} onChange={(e)=>setTitle(e.target.value)} className="h-10 rounded-lg bg-background-light/70 dark:bg-background-dark/70 pl-4 pr-3 text-background-dark/80 dark:text-background-light/80 hover:bg-background-light/90 dark:hover:bg-background-dark/90 transition-colors">
+              <option value="">Sarlavha (barchasi)</option>
+              {titles.map(t=> <option key={t} value={t}>{t}</option>)}
+            </select>
+            <select value={topic} onChange={(e)=>setTopic(e.target.value)} className="h-10 rounded-lg bg-background-light/70 dark:bg-background-dark/70 pl-4 pr-3 text-background-dark/80 dark:text-background-light/80 hover:bg-background-light/90 dark:hover:bg-background-dark/90 transition-colors">
+              <option value="">Mavzu (barchasi)</option>
+              {topics.map(t=> <option key={t} value={t}>{t}</option>)}
+            </select>
+            <select value={year} onChange={(e)=>setYear(e.target.value)} className="h-10 rounded-lg bg-background-light/70 dark:bg-background-dark/70 pl-4 pr-3 text-background-dark/80 dark:text-background-light/80 hover:bg-background-light/90 dark:hover:bg-background-dark/90 transition-colors">
+              <option value="">Yil (barchasi)</option>
+              {years.map(y=> <option key={y} value={y}>{y}</option>)}
+            </select>
           </div>
           <div className="p-4 space-y-8">
             <div>
               <h2 className="text-background-dark dark:text-background-light text-2xl font-bold leading-tight tracking-tight px-4 pb-4">
-                Mashhur materiallar
+                Kutubxona fayllari
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                {featuredBooks.map((book, index) => (
-                  <div key={index} className="flex flex-col gap-3 group">
-                    <div
-                      className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
-                      style={{ backgroundImage: `url("${book.image}")` }}
-                    ></div>
-                    <div>
-                      <p className="text-background-dark dark:text-background-light text-sm font-semibold leading-normal truncate group-hover:text-primary">
-                        {book.title}
-                      </p>
-                      <p className="text-background-dark/60 dark:text-background-light/60 text-xs font-normal leading-normal">
-                        {book.author}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h2 className="text-background-dark dark:text-background-light text-2xl font-bold leading-tight tracking-tight px-4 pb-4">
-                Yangi qo'shilganlar
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {recentBooks.map((book, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-4 p-4 rounded-lg bg-background-light/70 dark:bg-background-dark/70 shadow-md hover:shadow-lg transition-shadow duration-300"
-                  >
-                    <div
-                      className="w-24 h-32 flex-shrink-0 bg-center bg-no-repeat bg-cover rounded-lg"
-                      style={{ backgroundImage: `url("${book.image}")` }}
-                    ></div>
-                    <div className="flex-grow space-y-2">
-                      <p className="text-background-dark dark:text-background-light text-base font-semibold leading-normal">
-                        {book.title}
-                      </p>
-                      <p className="text-background-dark/60 dark:text-background-light/60 text-sm font-normal leading-normal">
-                        {book.author}
-                      </p>
-                      <p className="text-background-dark/80 dark:text-background-light/80 text-xs font-normal leading-normal line-clamp-2">
-                        {book.description}
-                      </p>
-                      <div className="flex items-center gap-2 pt-2">
-                        <button className="flex items-center justify-center rounded-full h-8 px-4 bg-primary text-background-dark text-xs font-bold leading-normal tracking-wide hover:bg-primary/90 transition-colors">
-                          O'qish
-                        </button>
-                        <button className="flex items-center justify-center rounded-full h-8 w-8 bg-background-light/80 dark:bg-background-dark/80 text-background-dark/60 dark:text-background-light/60 hover:bg-background-light/100 dark:hover:bg-background-dark/100 transition-colors">
-                          <span className="material-symbols-outlined text-base">
-                            bookmark_add
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
+                {filtered.map((f) => (
+                  <div key={f.id} className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
+                    <div className="relative p-4 flex-grow flex flex-col justify-between">
+                      <div>
+                        <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
+                          <span className="material-symbols-outlined text-primary text-4xl">
+                            {f.type === "ppt" || f.type === "pptx" ? "slideshow" : f.type === "pdf" ? "picture_as_pdf" : "description"}
                           </span>
-                        </button>
+                        </div>
+                        <h3 className="font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">{f.title}</h3>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 uppercase">{f.type} • {f.author} • {f.topic} • {f.year}</p>
                       </div>
+                      <a
+                        href={f.href}
+                        download
+                        className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm"
+                      >
+                        <span className="material-symbols-outlined text-base">download</span>
+                        Yuklab olish
+                      </a>
                     </div>
                   </div>
                 ))}
               </div>
+              {filtered.length === 0 && (
+                <div className="text-center text-gray-500 dark:text-gray-400 px-4">Tanlangan filtrlar bo'yicha fayl topilmadi.</div>
+              )}
             </div>
-          </div>
-          <div className="flex items-center justify-center p-4">
-            <button
-              type="button"
-              className="flex size-10 items-center justify-center text-background-dark/60 dark:text-background-light/60 hover:text-primary"
-            >
-              <span className="material-symbols-outlined">chevron_left</span>
-            </button>
-            <button
-              type="button"
-              className="text-sm font-bold leading-normal flex size-10 items-center justify-center text-background-dark rounded-full bg-primary"
-            >
-              1
-            </button>
-            <button
-              type="button"
-              className="text-sm font-normal leading-normal flex size-10 items-center justify-center text-background-dark/60 dark:text-background-light/60 rounded-full hover:bg-primary/20 dark:hover:bg-primary/30 hover:text-primary"
-            >
-              2
-            </button>
-            <button
-              type="button"
-              className="text-sm font-normal leading-normal flex size-10 items-center justify-center text-background-dark/60 dark:text-background-light/60 rounded-full hover:bg-primary/20 dark:hover:bg-primary/30 hover:text-primary"
-            >
-              3
-            </button>
-            <button
-              type="button"
-              className="text-sm font-normal leading-normal flex size-10 items-center justify-center text-background-dark/60 dark:text-background-light/60 rounded-full hover:bg-primary/20 dark:hover:bg-primary/30 hover:text-primary"
-            >
-              4
-            </button>
-            <button
-              type="button"
-              className="text-sm font-normal leading-normal flex size-10 items-center justify-center text-background-dark/60 dark:text-background-light/60 rounded-full hover:bg-primary/20 dark:hover:bg-primary/30 hover:text-primary"
-            >
-              5
-            </button>
-            <button
-              type="button"
-              className="flex size-10 items-center justify-center text-background-dark/60 dark:text-background-light/60 hover:text-primary"
-            >
-              <span className="material-symbols-outlined">chevron_right</span>
-            </button>
           </div>
         </div>
       </div>

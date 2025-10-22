@@ -8,6 +8,7 @@ import Materials from "./pages/Materials";
 import Videos from "./pages/Videos";
 import Tests from "./pages/Tests";
 import Assignments from "./pages/Assignments";
+import AssignmentsByWeek from "./pages/AssignmentsByWeek";
 import Library from "./pages/Library";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -24,6 +25,7 @@ function App() {
           <Route path="/videos" element={<Videos />} />
           <Route path="/tests" element={<Tests />} />
           <Route path="/assignments" element={<Assignments />} />
+          <Route path="/assignments/by-week" element={<AssignmentsByWeek />} />
           <Route path="/library" element={<Library />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
