@@ -21,7 +21,9 @@ const Assignments = () => {
         cls: "text-blue-600 bg-blue-100 dark:bg-blue-900/50 dark:text-blue-400",
       };
     return {
-      text: due ? `Muddat: ${new Date(due).toLocaleDateString("uz-UZ", { day: "2-digit", month: "long" })}` : "Muddat yo'q",
+      text: due
+        ? `Muddat: ${new Date(due).toLocaleDateString("uz-UZ", { day: "2-digit", month: "long" })}`
+        : "Muddat yo'q",
       cls: "text-red-500 bg-red-100 dark:bg-red-900/50 dark:text-red-400",
     };
   };
@@ -36,10 +38,13 @@ const Assignments = () => {
     <div className="relative flex min-h-screen w-full flex-col">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-4 hover:opacity-80 transition-opacity"
+          >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-6 w-6 text-[#A7D9FF]"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -50,10 +55,13 @@ const Assignments = () => {
                 ></path>
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              SoloStudy
+            <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
+              <span className="hidden sm:inline">
+                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+              </span>
+              <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
-          </div>
+          </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
             <a
@@ -95,7 +103,7 @@ const Assignments = () => {
             </a>
           </nav>
 
-         <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <a
               href="/about"
               className="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all hover:shadow-lg bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
@@ -172,75 +180,85 @@ const Assignments = () => {
           </div>
         )}
       </header>
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col gap-8">
-          <header>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+          {/* Hero Section */}
+          <div className="text-center mb-16">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter mb-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-white dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
               Mustaqil o'qish topshiriqlari
             </h1>
-          </header>
-          <div className="border-b border-gray-200 dark:border-gray-700">
-            <nav aria-label="Tabs" className="-mb-px flex gap-6">
-              <Link
-                to="/assignments"
-                className="shrink-0 border-b-2 border-primary px-1 pb-4 text-sm font-semibold text-primary"
-              >
-                Fan bo'yicha
-              </Link>
-              <Link
-                to="/assignments/by-week"
-                className="shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200"
-              >
-                Haftalar bo'yicha
-              </Link>
-            </nav>
+            <p className="text-lg sm:text-xl lg:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Fan bo'yicha va haftalar bo'yicha topshiriqlarni yuklab oling.
+              Turli xil formatidagi topshiriqlar bilan bilimingizni
+              mustahkamlang!
+            </p>
           </div>
-          <div className="space-y-12">
+          <div className="space-y-16">
             {assignmentsData.map((section) => (
-              <section key={section.subject} className="space-y-6">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  {section.subject}
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <section key={section.subject} className="space-y-8">
+                <div className="text-center">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                    {section.subject}
+                  </h2>
+                  <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary-dark mx-auto rounded-full"></div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-5xl mx-auto">
                   {section.items.map((item) => {
                     const badge = badgeFor(item.status, item.due);
                     const pg = progressFor(item.status);
                     return (
-                      <div key={item.id} className="bg-white dark:bg-background-dark/50 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
+                      <div
+                        key={item.id}
+                        className="group bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 flex flex-col border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
+                      >
                         <div className="p-6 flex-1 flex flex-col justify-between">
                           <div>
-                            <div className="flex items-center justify-between mb-2">
-                              <h3 className="text-base font-bold text-gray-800 dark:text-gray-200">
-                                {item.title}
-                              </h3>
-                              <span className={`text-xs font-medium px-2 py-1 rounded-full ${badge.cls}`}>
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary/30 dark:from-primary/30 dark:to-primary/40 rounded-xl shadow-lg">
+                                <span className="material-symbols-outlined text-primary text-2xl">
+                                  assignment
+                                </span>
+                              </div>
+                              <span
+                                className={`text-xs font-medium px-3 py-1 rounded-full ${badge.cls}`}
+                              >
                                 {badge.text}
                               </span>
                             </div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                              DOCX faylini yuklab olib ko'ring va topshirig'ingizni tayyorlang.
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 leading-tight">
+                              {item.title}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                              DOCX faylini yuklab olib ko'ring va
+                              topshirig'ingizni tayyorlang.
                             </p>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex gap-3">
                             <a
                               href={item.href}
                               download
-                              className="inline-flex items-center gap-2 text-sm font-semibold text-gray-800 bg-primary py-2 px-4 rounded-lg hover:bg-primary/90 transition-shadow shadow-sm hover:shadow-md"
+                              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-4 rounded-xl text-sm font-bold hover:shadow-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:from-blue-700 hover:to-blue-800"
                             >
-                              <span className="material-symbols-outlined text-base">download</span>
-                              <span>DOCX yuklab olish</span>
+                              <span className="material-symbols-outlined text-base">
+                                download
+                              </span>
+                              <span>Yuklab olish</span>
                             </a>
                             <a
                               href={item.href}
-                              className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                              className="flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 py-3 px-4 rounded-xl text-sm font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm"
                             >
-                              <span className="material-symbols-outlined text-base">visibility</span>
+                              <span className="material-symbols-outlined text-base">
+                                visibility
+                              </span>
                               <span>Ko'rish</span>
                             </a>
                           </div>
                         </div>
                         <div className="h-2 bg-gray-200 dark:bg-gray-700">
-                          <div className={`h-2 ${pg.color} ${pg.w}`}></div>
+                          <div
+                            className={`h-2 ${pg.color} ${pg.w} transition-all duration-500`}
+                          ></div>
                         </div>
                       </div>
                     );
@@ -256,7 +274,6 @@ const Assignments = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               2025 SoloStudy. Barcha huquqlar himoyalangan.
-              © 2025 SoloStudy. Barcha huquqlar himoyalangan.
             </p>
             <div className="flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-300">
               <Link

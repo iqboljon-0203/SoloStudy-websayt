@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { topics } from "../data/tests";
 const Tests = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const topic = topics[0];
-  const questions = topic?.questions || [];
+  const [selectedTopic, setSelectedTopic] = useState(null);
   const [selections, setSelections] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
@@ -14,6 +13,8 @@ const Tests = () => {
   };
 
   const handleSubmit = () => {
+    if (!selectedTopic) return;
+    const questions = selectedTopic.questions;
     const correct = questions.reduce((acc, q) => {
       const selected = selections[q.id];
       const opt = (q.options || []).find((o) => o.id === selected);
@@ -23,6 +24,21 @@ const Tests = () => {
     setSubmitted(true);
   };
 
+  const startTest = (topic) => {
+    setSelectedTopic(topic);
+    setSelections({});
+    setSubmitted(false);
+    setScore(0);
+  };
+
+  const resetTest = () => {
+    setSelectedTopic(null);
+    setSelections({});
+    setSubmitted(false);
+    setScore(0);
+  };
+
+  const questions = selectedTopic?.questions || [];
   const total = questions.length;
   const answered = Object.keys(selections).length;
   const progress = total ? Math.round((answered / total) * 100) : 0;
@@ -32,10 +48,13 @@ const Tests = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm mb-4">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-4 hover:opacity-80 transition-opacity"
+          >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-6 w-6 text-[#A7D9FF]"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -46,10 +65,13 @@ const Tests = () => {
                 ></path>
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              SoloStudy
+            <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
+              <span className="hidden sm:inline">
+                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+              </span>
+              <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
-          </div>
+          </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
             <a
@@ -169,228 +191,194 @@ const Tests = () => {
       </header>
 
       <main className="flex-grow container mx-auto px-6 py-10">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-              Onlayn test: Ma'lumotlar tuzilmasi
-            </h2>
-            <p className="text-gray-500 dark:text-gray-400">
-              Bilimingizni sinash uchun quyidagi savollarni yeching.
+        <div className="max-w-6xl mx-auto">
+          {/* Hero Section */}
+          <div className="text-center mb-16">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter mb-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-white dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
+              Testlar
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Bilimingizni sinash uchun mavzular bo'yicha testlarni yeching. Har
+              bir mavzu uchun alohida testlar mavjud.
             </p>
           </div>
 
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                Jarayon
-              </span>
-              <span className="text-sm font-bold text-primary">{progress}%</span>
-            </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-              <div
-                className="bg-primary h-2.5 rounded-full"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-          </div>
-
-          <div className="space-y-12">
-            {questions.map((q, idx) => (
-              <div key={q.id} className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
-                  <span className="text-primary font-bold">Savol {idx + 1}:</span>
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">{q.text}</p>
-                <div className="space-y-3">
-                  {(q.options || []).map((opt) => (
-                    <label key={opt.id} className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer">
-                      <input
-                        className="form-radio text-primary focus:ring-primary focus:ring-offset-0"
-                        name={`question_${q.id}`}
-                        type="radio"
-                        checked={selections[q.id] === opt.id}
-                        onChange={() => handleSelect(q.id, opt.id)}
-                      />
-                      <span className={`ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 ${submitted && opt.isCorrect ? "font-bold" : ""}`}>
-                        {opt.text}
+          {!selectedTopic ? (
+            /* Topics Selection */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+              {topics.map((topic) => (
+                <div
+                  key={topic.id}
+                  className="group bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden cursor-pointer"
+                  onClick={() => startTest(topic)}
+                >
+                  <div className="p-8">
+                    <div className="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-primary/30 dark:from-primary/30 dark:to-primary/40 rounded-xl shadow-lg">
+                      <span className="material-symbols-outlined text-primary text-3xl">
+                        quiz
                       </span>
-                    </label>
-                  ))}
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 text-center">
+                      {topic.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-6">
+                      {topic.description}
+                    </p>
+                    <div className="flex items-center justify-center gap-2 text-primary font-semibold">
+                      <span>Testni boshlash</span>
+                      <span className="material-symbols-outlined text-lg">
+                        arrow_forward
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            /* Test Interface */
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-4">
+                  <button
+                    onClick={resetTest}
+                    className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+                  >
+                    <span className="material-symbols-outlined">
+                      arrow_back
+                    </span>
+                    <span>Mavzularga qaytish</span>
+                  </button>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {selectedTopic.description}
+                    </p>
+                  </div>
                 </div>
               </div>
-            ))}
 
-            {total > 0 && (
-              <div className="text-right">
-                <button
-                  onClick={handleSubmit}
-                  disabled={submitted || answered < total}
-                  className={`px-8 py-3 text-base font-bold text-gray-800 rounded-lg shadow-lg transform transition-all ${submitted || answered < total ? "bg-gray-300 dark:bg-gray-700 cursor-not-allowed" : "bg-primary hover:shadow-xl hover:bg-primary/90 hover:-translate-y-0.5"}`}
-                >
-                  Testni yuborish
-                </button>
-              </div>
-            )}
-          </div>
-
-          {submitted && (
-            <div className="mt-16 pt-10 border-t border-gray-200 dark:border-gray-700">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Test natijalari</h2>
-              <div className="bg-primary/10 dark:bg-primary/20 p-4 rounded-lg mb-8 flex items-center gap-4">
-                <p className="text-lg font-semibold text-primary">
-                  Siz {total} savoldan {score} tasiga to'g'ri javob berdingiz.
-                </p>
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Jarayon
+                  </span>
+                  <span className="text-sm font-bold text-primary">
+                    {progress}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                  <div
+                    className="bg-primary h-2.5 rounded-full"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
               </div>
 
-              <div className="space-y-8">
-                {questions.map((q, idx) => {
-                  const selectedId = selections[q.id];
-                  const selected = (q.options || []).find((o) => o.id === selectedId);
-                  const correct = (q.options || []).find((o) => o.isCorrect);
-                  const isCorrect = !!(selected && selected.isCorrect);
-                  return (
-                    <div
-                      key={q.id}
-                      className={`${isCorrect ? "bg-green-500/10 dark:bg-green-500/20 border border-green-500/20" : "bg-red-500/10 dark:bg-red-500/20 border border-red-500/20"} p-6 rounded-xl`}
-                    >
-                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Savol {idx + 1}</h3>
-                      <p className="text-gray-600 dark:text-gray-300 mb-2">
-                        Sizning javobingiz: {" "}
-                        <span className={`font-semibold ${isCorrect ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
-                          {selected ? selected.text : "Tanlanmagan"} {isCorrect ? "(To'g'ri)" : "(Noto'g'ri)"}
-                        </span>
-                      </p>
-                      {!isCorrect && correct && (
-                        <p className="text-gray-600 dark:text-gray-300 mb-3">
-                          To'g'ri javob: {" "}
-                          <span className="font-semibold text-green-600 dark:text-green-400">{correct.text}</span>
-                        </p>
-                      )}
+              <div className="space-y-12">
+                {questions.map((q, idx) => (
+                  <div
+                    key={q.id}
+                    className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
+                      <span className="text-primary font-bold">
+                        Savol {idx + 1}:
+                      </span>
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">
+                      {q.text}
+                    </p>
+                    <div className="space-y-3">
+                      {(q.options || []).map((opt) => (
+                        <label
+                          key={opt.id}
+                          className="flex items-center p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer"
+                        >
+                          <input
+                            className="form-radio text-primary focus:ring-primary focus:ring-offset-0"
+                            name={`question_${q.id}`}
+                            type="radio"
+                            checked={selections[q.id] === opt.id}
+                            onChange={() => handleSelect(q.id, opt.id)}
+                          />
+                          <span
+                            className={`ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 ${submitted && opt.isCorrect ? "font-bold" : ""}`}
+                          >
+                            {opt.text}
+                          </span>
+                        </label>
+                      ))}
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
+
+                {total > 0 && (
+                  <div className="text-right">
+                    <button
+                      onClick={handleSubmit}
+                      disabled={submitted || answered < total}
+                      className={`px-8 py-3 text-base font-bold text-gray-800 rounded-lg shadow-lg transform transition-all ${submitted || answered < total ? "bg-gray-300 dark:bg-gray-700 cursor-not-allowed" : "bg-primary hover:shadow-xl hover:bg-primary/90 hover:-translate-y-0.5"}`}
+                    >
+                      Testni yuborish
+                    </button>
+                  </div>
+                )}
               </div>
+
+              {submitted && (
+                <div className="mt-16 pt-10 border-t border-gray-200 dark:border-gray-700">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    Test natijalari
+                  </h2>
+                  <div className="bg-primary/10 dark:bg-primary/20 p-4 rounded-lg mb-8 flex items-center gap-4">
+                    <p className="text-lg font-semibold text-primary">
+                      Siz {total} savoldan {score} tasiga to'g'ri javob
+                      berdingiz.
+                    </p>
+                  </div>
+
+                  <div className="space-y-8">
+                    {questions.map((q, idx) => {
+                      const selectedId = selections[q.id];
+                      const selected = (q.options || []).find(
+                        (o) => o.id === selectedId
+                      );
+                      const correct = (q.options || []).find(
+                        (o) => o.isCorrect
+                      );
+                      const isCorrect = !!(selected && selected.isCorrect);
+                      return (
+                        <div
+                          key={q.id}
+                          className={`${isCorrect ? "bg-green-500/10 dark:bg-green-500/20 border border-green-500/20" : "bg-red-500/10 dark:bg-red-500/20 border border-red-500/20"} p-6 rounded-xl`}
+                        >
+                          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
+                            Savol {idx + 1}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-300 mb-2">
+                            Sizning javobingiz:{" "}
+                            <span
+                              className={`font-semibold ${isCorrect ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
+                            >
+                              {selected ? selected.text : "Tanlanmagan"}{" "}
+                              {isCorrect ? "(To'g'ri)" : "(Noto'g'ri)"}
+                            </span>
+                          </p>
+                          {!isCorrect && correct && (
+                            <p className="text-gray-600 dark:text-gray-300 mb-3">
+                              To'g'ri javob:{" "}
+                              <span className="font-semibold text-green-600 dark:text-green-400">
+                                {correct.text}
+                              </span>
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
-
-          <div className="mt-16 pt-10 border-t border-gray-200 dark:border-gray-700">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              Statistika paneli
-            </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-3 bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                      Vaqt davomida rivojlanish
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      So'nggi 7 kun
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">
-                      {submitted ? `${percent}%` : `${progress}%`}
-                    </p>
-                    <p className="text-sm font-medium text-green-600 dark:text-green-400">
-                      {submitted ? `${score}/${total}` : `${answered}/${total}`}
-                    </p>
-                  </div>
-                </div>
-                <div className="h-48">
-                  <svg
-                    fill="none"
-                    height="100%"
-                    preserveAspectRatio="none"
-                    viewBox="0 0 472 150"
-                    width="100%"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <defs>
-                      <linearGradient
-                        id="chartGradient"
-                        x1="0"
-                        x2="0"
-                        y1="0"
-                        y2="100%"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor="#A7D9FF"
-                          stopOpacity="0.4"
-                        ></stop>
-                        <stop
-                          offset="100%"
-                          stopColor="#A7D9FF"
-                          stopOpacity="0"
-                        ></stop>
-                      </linearGradient>
-                    </defs>
-                    <path
-                      d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V150H0V109Z"
-                      fill="url(#chartGradient)"
-                    ></path>
-                    <path
-                      d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25"
-                      stroke="#A7D9FF"
-                      strokeLinecap="round"
-                      strokeWidth="3"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-
-              <div className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                <h3 className="text-base font-semibold text-gray-600 dark:text-gray-300 mb-2">
-                  O'rtacha ball
-                </h3>
-                <p className="text-3xl font-bold text-primary">{submitted ? `${percent}%` : `0%`}</p>
-              </div>
-
-              <div className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                <h3 className="text-base font-semibold text-gray-600 dark:text-gray-300 mb-2">
-                  Muvaffaqiyat darajasi
-                </h3>
-                <p className="text-3xl font-bold text-primary">{submitted ? `${percent}%` : `0%`}</p>
-              </div>
-
-              <div className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                <h3 className="text-base font-semibold text-gray-600 dark:text-gray-300 mb-2">
-                  Olingan medallar
-                </h3>
-                <p className="text-3xl font-bold text-primary">3</p>
-              </div>
-
-              <div className="lg:col-span-3">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                  Sizning medallaringiz
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  <div
-                    className="aspect-square bg-cover rounded-xl shadow-lg transform hover:scale-105 transition-transform"
-                    style={{
-                      backgroundImage:
-                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC_7iPHqx8PJK-heKTxc-T8EcPLfwpFG6IeZdQBEMPF3eUkXemVy9BHm5XtwhYuxJE-qZJTyUWkjRAkBe5GQgNdA3GNaK7hzInH_Ew34SficKmt9kB03a9Bxdl5UG_oXpzNJLUv_e-wrFySIhhU14Elbhi91k7TMPodUcoIXjS0A_Jso5Ih1I2rIwKHCvhc7GyfrATHic33y-ZokgKv40q__7fKXGo8BYNWq-Nj5aEMBS8fG7_lXK0pe6c-IIvpOo-uPy8z4pinQB8" )',
-                    }}
-                  ></div>
-                  <div
-                    className="aspect-square bg-cover rounded-xl shadow-lg transform hover:scale-105 transition-transform"
-                    style={{
-                      backgroundImage:
-                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuABbxk9T5xNQ6jlLIBGkL4youMizU9O7WpQjynyiw3fD7lZll868yQXBt5wt_2X7TCri7bM46VErHmVt_6XY7ah7EhFCbDDChoFLetS1jIid8Tg39MYIS0rg5SwG2JHmD2E9HemKsN3M1-y9CzFCJYzPOAeMJbLdf72to2uNQ4781vKq8KoWr8pMvOmfcXXkfpg8CwDTDNgz6msmcSblUFUNh4Q6LAQajT5VwZWBQjequ1u5thUUEWzQNXnnhVeQJG1_mgVFyeOBAI" )',
-                    }}
-                  ></div>
-                  <div
-                    className="aspect-square bg-cover rounded-xl shadow-lg transform hover:scale-105 transition-transform"
-                    style={{
-                      backgroundImage:
-                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCPptwh90U-pkTLqejHQqwjlprzDOEOtLioT48QAmoObRjbroI5dir7hvU-uuU68qPniHW_aJvYuK1ABpf4BmojI3w44BkYv3Y_sexOWCPZjor-oDEAfO_-19S94Xo29VaZ5z2rqLv6XS_hnGbspRtxD_H776Lm2DSiRphcxXjnlVufR5yuH-kW5busy4odLZPWoRHYUpWj_1dQZyeSMNDQJlfDP0Sm8biL2yHP2oeRvtYcfxAW4UU-PTZMS6OthfNKb1aNvrV1SNY" )',
-                    }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
 

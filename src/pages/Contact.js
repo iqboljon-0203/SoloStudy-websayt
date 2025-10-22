@@ -2,15 +2,83 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 const Contact = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const botToken = "8352865006:AAHTHIl8knh6QQGA-jDlk1h9T9hK696xhLA";
+    const chatId = "647109109";
+
+    const message = `
+📧 Yangi xabar SoloStudy.uz Contact sahifasidan:
+
+👤 Ism: ${formData.name}
+📧 Email: ${formData.email}
+📝 Mavzu: ${formData.subject}
+
+💬 Xabar:
+${formData.message}
+
+⏰ Vaqt: ${new Date().toLocaleString("uz-UZ")}
+    `;
+
+    try {
+      // CORS proxy orqali yuborish
+      const response = await fetch(
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(
+          `https://api.telegram.org/bot${botToken}/sendMessage`
+        )}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: "HTML",
+          }),
+        }
+      );
+
+      if (response.ok) {
+        alert("Xabaringiz muvaffaqiyatli yuborildi!");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        const errorData = await response.text();
+        console.error("Error response:", errorData);
+        alert("Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <div className="flex flex-col min-h-screen">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm mb-4">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-4 hover:opacity-80 transition-opacity"
+          >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-6 w-6 text-[#A7D9FF]"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -21,10 +89,13 @@ const Contact = () => {
                 ></path>
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              SoloStudy
+            <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
+              <span className="hidden sm:inline">
+                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+              </span>
+              <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
-          </div>
+          </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
             <a
@@ -156,7 +227,7 @@ const Contact = () => {
                   quyidagi aloqa ma'lumotlaridan foydalaning.
                 </p>
               </div>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label
                     className="block text-sm font-medium mb-2"
@@ -167,8 +238,12 @@ const Contact = () => {
                   <input
                     className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary shadow-sm hover:shadow-md transition-all duration-300"
                     id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     placeholder="Ism Familiya"
                     type="text"
+                    required
                   />
                 </div>
                 <div>
@@ -181,8 +256,12 @@ const Contact = () => {
                   <input
                     className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary shadow-sm hover:shadow-md transition-all duration-300"
                     id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     placeholder="example@mail.com"
                     type="email"
+                    required
                   />
                 </div>
                 <div>
@@ -195,8 +274,12 @@ const Contact = () => {
                   <input
                     className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary shadow-sm hover:shadow-md transition-all duration-300"
                     id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
                     placeholder="Materiallar haqida savol"
                     type="text"
+                    required
                   />
                 </div>
                 <div>
@@ -209,8 +292,12 @@ const Contact = () => {
                   <textarea
                     className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary shadow-sm hover:shadow-md transition-all duration-300"
                     id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
                     placeholder="Xabaringizni yozing..."
                     rows="5"
+                    required
                   ></textarea>
                 </div>
                 <div>
@@ -238,7 +325,7 @@ const Contact = () => {
                     <div>
                       <h4 className="font-semibold">Elektron pochta</h4>
                       <p className="text-subtle-light dark:text-subtle-dark">
-                        support@SoloStudy.com
+                        <a href="mailto:adpi@edu.uz">adpi@edu.uz</a>
                       </p>
                     </div>
                   </div>
@@ -251,7 +338,7 @@ const Contact = () => {
                     <div>
                       <h4 className="font-semibold">Telefon</h4>
                       <p className="text-subtle-light dark:text-subtle-dark">
-                        +998 (90) 123-45-67
+                        <a href="tel:+998942298877">+998 (94) 229-88-77</a>
                       </p>
                     </div>
                   </div>
@@ -264,7 +351,9 @@ const Contact = () => {
                     <div>
                       <h4 className="font-semibold">Manzil</h4>
                       <p className="text-subtle-light dark:text-subtle-dark">
-                        Toshkent shahri, Chilonzor tumani, 15-mavze
+                        <a href="https://yandex.uz/maps/-/CLbfvMlk">
+                          Do'stlik ko'chasi, 4-uy, Andijon shahar, O'zbekiston
+                        </a>
                       </p>
                     </div>
                   </div>

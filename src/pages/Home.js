@@ -13,10 +13,13 @@ const Home = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-4 hover:opacity-80 transition-opacity"
+          >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-6 w-6 text-[#A7D9FF]"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -27,13 +30,16 @@ const Home = () => {
                 ></path>
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              SoloStudy
+            <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
+              <span className="hidden sm:inline">
+                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+              </span>
+              <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
-          </div>
+          </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-6 lg:flex">
+          <nav className="hidden items-center gap-4 xl:gap-6 md:flex">
             <a
               className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
               href="/"
@@ -72,24 +78,24 @@ const Home = () => {
             </a>
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <a
               href="/about"
-              className="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all hover:shadow-lg bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
+              className="hidden md:flex min-w-[70px] sm:min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 sm:h-10 px-2 sm:px-4 text-xs sm:text-sm font-bold tracking-wide transition-all hover:shadow-lg bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
             >
               <span className="truncate">Biz haqimizda</span>
             </a>
             <a
               href="/contact"
-              className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="flex min-w-[70px] sm:min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 sm:h-10 px-2 sm:px-4 bg-primary text-text-primary-light text-xs sm:text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Bog'lanish</span>
             </a>
             <button
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+              className="md:hidden p-1 sm:p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <span className="material-symbols-outlined text-gray-800 dark:text-gray-200">
+              <span className="material-symbols-outlined text-gray-800 dark:text-gray-200 text-lg sm:text-xl">
                 {isMenuOpen ? "close" : "menu"}
               </span>
             </button>
@@ -97,7 +103,7 @@ const Home = () => {
         </div>
         {/* Mobile nav */}
         {isMenuOpen && (
-          <div className="lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
+          <div className="md:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
             <a
               className="text-sm font-medium text-[#A7D9FF] dark:text-[#A7D9FF] transition-colors"
               href="/"
@@ -136,13 +142,13 @@ const Home = () => {
             </a>
             <a
               href="/about"
-              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="min-w-[70px] sm:min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-8 sm:h-10 px-2 sm:px-4 bg-primary text-text-primary-light text-xs sm:text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Biz haqimizda</span>
             </a>
             <a
               href="/contact"
-              className="min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-10 px-4 bg-primary text-text-primary-light text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
+              className="min-w-[70px] sm:min-w-[84px] cursor-pointer flex items-center justify-start overflow-hidden rounded-lg h-8 sm:h-10 px-2 sm:px-4 bg-primary text-text-primary-light text-xs sm:text-sm font-bold tracking-wide transition-all hover:shadow-lg hover:brightness-110"
             >
               <span className="truncate">Bog'lanish</span>
             </a>
@@ -168,23 +174,27 @@ const Home = () => {
               <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
-                  backgroundImage:
-                    `linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(${Back1})`,
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(${Back1})`,
                 }}
               ></div>
               <div className="absolute inset-0 bg-background-dark/30 dark:bg-background-dark/50"></div>
               <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative h-full flex flex-col justify-center text-center text-white">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter">
-                  Kelajak sari ilm bilan
-                </h1>
-                <p className="mt-4 max-w-2xl mx-auto text-base sm:text-lg lg:text-xl font-light text-gray-200 dark:text-gray-300">
-                  SoloStudy — bu talabalarning mustaqil ta’lim jarayonini yangi bosqichga olib chiqish uchun yaratilgan innovatsion raqamli platforma.
-                </p>
-                <Link to="/materials">
-                  <button className="mt-8 h-12 px-6 rounded-xl bg-primary text-text-primary-light text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50 mx-auto">
-                  O'qishni boshlash
-                </button>
-                </Link>
+                <div className="bg-black/40 backdrop-blur-sm rounded-3xl p-8 sm:p-12 lg:p-16 max-w-4xl mx-auto">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter mb-6">
+                    Kelajak sari ilm bilan
+                  </h1>
+                  <p className="text-base sm:text-lg lg:text-xl font-light text-gray-100 leading-relaxed mb-8">
+                    SoloStudy — bu talabalarning mustaqil ta'lim jarayonini
+                    yangi bosqichga olib chiqish uchun yaratilgan innovatsion
+                    raqamli platforma.
+                  </p>
+                  <Link
+                    to="/materials"
+                    className="inline-flex items-center justify-center h-12 px-8 rounded-xl bg-primary text-white text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50"
+                  >
+                    O'qishni boshlash
+                  </Link>
+                </div>
               </div>
             </div>
 
@@ -192,23 +202,27 @@ const Home = () => {
               <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
-                  backgroundImage:
-                    `linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(${Back2})`,
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(${Back2})`,
                 }}
               ></div>
               <div className="absolute inset-0 bg-background-dark/30 dark:bg-background-dark/50"></div>
               <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative h-full flex flex-col justify-center text-center text-white">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter">
-                  Interaktiv ta'lim muhiti
-                </h1>
-                <p className="mt-4 max-w-2xl mx-auto text-base sm:text-lg lg:text-xl font-light text-gray-200 dark:text-gray-300">
-                  SoloStudy — o‘z ustida ishlaydigan, yangilikka intiluvchi va zamonaviy texnologiyalarni o‘zlashtirgan yoshlar uchun yaratilgan ta’lim maydoni.
-                </p>
-                <Link to="/videos">
-                <button className="mt-8 h-12 px-6 rounded-xl bg-primary text-text-primary-light text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50 mx-auto">
-                  Darslarni ko'rish
-                </button>
-                </Link> 
+                <div className="bg-black/40 backdrop-blur-sm rounded-3xl p-8 sm:p-12 lg:p-16 max-w-4xl mx-auto">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter mb-6">
+                    Interaktiv ta'lim muhiti
+                  </h1>
+                  <p className="text-base sm:text-lg lg:text-xl font-light text-gray-100 leading-relaxed mb-8">
+                    SoloStudy — o'z ustida ishlaydigan, yangilikka intiluvchi va
+                    zamonaviy texnologiyalarni o'zlashtirgan yoshlar uchun
+                    yaratilgan ta'lim maydoni.
+                  </p>
+                  <Link
+                    to="/videos"
+                    className="inline-flex items-center justify-center h-12 px-8 rounded-xl bg-primary text-white text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50"
+                  >
+                    Darslarni ko'rish
+                  </Link>
+                </div>
               </div>
             </div>
 
@@ -216,162 +230,233 @@ const Home = () => {
               <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
-                  backgroundImage:
-                    `linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(${Back3})`,
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url(${Back3})`,
                 }}
               ></div>
               <div className="absolute inset-0 bg-background-dark/30 dark:bg-background-dark/50"></div>
               <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative h-full flex flex-col justify-center text-center text-white">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter">
-                  Professional o'qituvchilar
-                </h1>
-                <p className="mt-4 max-w-2xl mx-auto text-base sm:text-lg lg:text-xl font-light text-gray-200 dark:text-gray-300">
-                  SoloStudy — har bir talabaning mustaqil fikrlaydigan, ijodkor va raqamli texnologiyalardan samarali foydalana oladigan shaxs sifatida shakllanishiga ko‘maklashishdir.
-                </p>
-                <Link to={"/about"}>
-                 <button className="mt-8 h-12 px-6 rounded-xl bg-primary text-text-primary-light text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50 mx-auto">
-                  O'qituvchilar bilan tanishing
-                </button>
-                </Link>
-               
+                <div className="bg-black/40 backdrop-blur-sm rounded-3xl p-8 sm:p-12 lg:p-16 max-w-4xl mx-auto">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter mb-6">
+                    Professional o'qituvchilar
+                  </h1>
+                  <p className="text-base sm:text-lg lg:text-xl font-light text-gray-100 leading-relaxed mb-8">
+                    SoloStudy — har bir talabaning mustaqil fikrlaydigan,
+                    ijodkor va raqamli texnologiyalardan samarali foydalana
+                    oladigan shaxs sifatida shakllanishiga ko'maklashishdir.
+                  </p>
+                  <Link
+                    to="/about"
+                    className="inline-flex items-center justify-center h-12 px-8 rounded-xl bg-primary text-white text-base font-bold tracking-wide transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/50"
+                  >
+                    O'qituvchilar bilan tanishing
+                  </Link>
+                </div>
               </div>
             </div>
           </Slider>
         </section>
 
         {/* Purpose Section */}
-        <section className="py-12 sm:py-24">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Bizning maqsadimiz:
-            </h2>
-            <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600 dark:text-gray-400 mb-8">
-             <span className="font-bold"> SoloStudy </span>platformasining asosiy maqsadi - talabalarga mustaqil ta’lim olish uchun qulay, interaktiv va zamonaviy muhit yaratish, shuningdek, o‘qituvchilarga ta’lim jarayonini innovatsion texnologiyalar orqali samarali tashkil etishda yordam berishdir.
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Platforma orqali foydalanuvchilar:
-            </h2>
-            <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600 dark:text-gray-400">
-             <ul className="list-inside">
-              <li className="mb-4">📘 Elektron darsliklar va o‘quv materiallarini o‘rganadi</li>
-              <li className="mb-4">🎥 Video darslarni tomosha qiladi</li>
-              <li className="mb-4">🧠 Onlayn testlar orqali o‘z bilimini tekshiradi</li>
-              <li className="mb-4">💬 Forumda fikr almashadi va savollar beradi</li>
-             </ul>
-
-            </p>
+        <section className="py-16 sm:py-24 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
+                Bizning maqsadimiz
+              </h2>
+              <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
+              <p className="max-w-4xl mx-auto text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                <span className="font-bold text-primary">SoloStudy</span>{" "}
+                platformasining asosiy maqsadi - talabalarga mustaqil ta'lim
+                olish uchun qulay, interaktiv va zamonaviy muhit yaratish,
+                shuningdek, o'qituvchilarga ta'lim jarayonini innovatsion
+                texnologiyalar orqali samarali tashkil etishda yordam berishdir.
+              </p>
+            </div>
           </div>
         </section>
 
-        {/* Latest Updates Section */}
-        <section className="bg-background-light dark:bg-background-dark py-16 sm:py-24">
+        {/* Features Section */}
+        <section className="py-16 sm:py-24 bg-white dark:bg-gray-900">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold tracking-tight text-center text-gray-900 dark:text-white">
-              Yangiliklar
-            </h2>
-            <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              <div className="group flex flex-col overflow-hidden rounded-xl bg-white dark:bg-gray-900/50 shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-                <div
-                  className="aspect-video w-full bg-cover bg-center"
-                  style={{
-                    backgroundImage:
-                      'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBb2zeGGFKOOrMQq1j8yHRHVYqpByQgWePEzg9CR1MvbvjyBc-_rdoSy5uh8i5h3SnaUWrg1cooFK92hmIIMDVXZxNne45o-Y-RTf4mF8q2g4tINuvlHFkKNqkW7Rin1McTRVKYSK9t2DFnynPpIvtofolaPJ7sVMG_Mnxv2UOvucaQ2c2aTZb1D-Dmt7CTcmTg3nQHtUuhWeVLNJ5zKCFBESJKhdlGns0M_wBvwKBowUkamRItL5ZJPMxIMcVUL5iUQZFBWgfqvlE")',
-                  }}
-                ></div>
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                    Yangi matematika darsliklari
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Yangilangan matematika darsliklari va interaktiv mashqlarni
-                    o'rganing.
-                  </p>
-                </div>
-              </div>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
+                Platforma orqali foydalanuvchilar
+              </h2>
+              <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
+            </div>
 
-              <div className="group flex flex-col overflow-hidden rounded-xl bg-white dark:bg-gray-900/50 shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-                <div
-                  className="aspect-video w-full bg-cover bg-center"
-                  style={{
-                    backgroundImage:
-                      'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDv9b336NkfCg3pV1KrHoZCVmu4LSVNoCk17XEkeP0vh5aZoknK3Op0TRfEjfOVNLyxwG8-h1YsCffmacNnkO8ih5hM9LexOYbaQ9hh7qHc8sAGFVAoZrTPrKBTA3j56xIJQG0zVvmJ-L-14kVoWHDKGOlfCVkizIKuXNqzmwoktTagx3gzA8Iy2oxKb--_eXaij0lXSbX-dgeA3REe3koaPno9gj6PPI7SJRNgsKWzK91ZQYCEmgO2XjXk2AmH3kiciSOzV8hdwDg")',
-                  }}
-                ></div>
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                    Interaktiv fan modullari
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Virtual laboratoriyalar va simulyatsiyalar bilan boyitilgan
-                    yangi fan modullarini kashf eting.
-                  </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <Link
+                to="/materials"
+                className="group text-center p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+              >
+                <div className="w-16 h-16 mx-auto mb-6 bg-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-white text-2xl">
+                    auto_stories
+                  </span>
                 </div>
-              </div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+                  Elektron darsliklar
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                  O'quv materiallarini o'rganadi va bilimlarini mustahkamlaydi
+                </p>
+              </Link>
 
-              <div className="group flex flex-col overflow-hidden rounded-xl bg-white dark:bg-gray-900/50 shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-                <div
-                  className="aspect-video w-full bg-cover bg-center"
-                  style={{
-                    backgroundImage:
-                      'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBrPYuyjG3rKBZTh2vaZOVMN_ME-UGVjUmen_VU2IXtPmzkagLjq_rbTGNHG5gP9iy7phEiE54bWie1qIBJbPnpABZuC-LGlbz4uEcxeS9bctfwjrp1wxdSjcQM4g0hCrRMMe3ipUJvNO218mT4d8Qhvu-Z7wO8_qPUffdI0X9-mR6X9VH8HLqg1u7_LJ8OiwFBkgjOzKVRS63isZouV6IPgGKicNF3SbnoGDN56hsU3Bb_o9eYSy7l_GQr5VC5wwV7vmzOYGoPv7I")',
-                  }}
-                ></div>
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                    O'qituvchilar uchun seminar
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Innovatsion usullar bilan o'qitish ko'nikmalaringizni
-                    oshiring.
-                  </p>
+              <Link
+                to="/videos"
+                className="group text-center p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-gray-800 dark:to-gray-700 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+              >
+                <div className="w-16 h-16 mx-auto mb-6 bg-purple-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-white text-2xl">
+                    movie
+                  </span>
                 </div>
-              </div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+                  Video darslar
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                  Interaktiv video darslarni tomosha qiladi va o'rganadi
+                </p>
+              </Link>
+
+              <Link
+                to="/tests"
+                className="group text-center p-8 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-800 dark:to-gray-700 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+              >
+                <div className="w-16 h-16 mx-auto mb-6 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-white text-2xl">
+                    quiz
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+                  Onlayn testlar
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                  O'z bilimini tekshiradi va natijalarini kuzatadi
+                </p>
+              </Link>
+
+              <Link
+                to="/library"
+                className="group text-center p-8 rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-gray-800 dark:to-gray-700 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+              >
+                <div className="w-16 h-16 mx-auto mb-6 bg-orange-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-white text-2xl">
+                    library_books
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+                  Kutubxona
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                  Elektron kitoblar, ilmiy maqolalar va materiallar kutubxonasi.
+                </p>
+              </Link>
             </div>
           </div>
         </section>
 
         {/* Quick Access Section */}
-        <section className="py-16 sm:py-24">
+        <section className="py-16 sm:py-24 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold tracking-tight text-center text-gray-900 dark:text-white">
-              Tezkor kirish
-            </h2>
-            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              <button className="group flex items-center justify-center gap-3 h-16 px-6 rounded-xl bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30 shadow-md hover:shadow-xl transition-all">
-                <span className="material-symbols-outlined text-[#A7D9FF]">
-                  auto_stories
-                </span>
-                <Link to={"/materials"}>
-                <span className="text-base font-bold text-primary-light dark:text-primary">
-                  O'quv materiallari
-                </span></Link>
-              </button>
-              <button className="group flex items-center justify-center gap-3 h-16 px-6 rounded-xl bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30 shadow-md hover:shadow-xl transition-all">
-                <span className="material-symbols-outlined text-[#A7D9FF]">
-                  movie
-                </span>
-               <Link to={"/videos"}>
-                <span className="text-base font-bold text-primary-light dark:text-primary">
-                  Video darslar
-                </span></Link>
-              </button>
-              <button className="group flex items-center justify-center gap-3 h-16 px-6 rounded-xl bg-primary/10 dark:bg-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30 shadow-md hover:shadow-xl transition-all sm:col-span-2 lg:col-span-1">
-                <span className="material-symbols-outlined text-[#A7D9FF]">
-                  quiz
-                </span>
-                <Link to={"/tests"}>
-                <span className="text-base font-bold text-primary-light dark:text-primary">
-                  Testlar
-                </span>
-                </Link>
-              </button>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
+                Tezkor kirish
+              </h2>
+              <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Platformamizning asosiy bo'limlariga tezda kirish va o'qishni
+                boshlash
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              <Link
+                to="/materials"
+                className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 dark:border-gray-700"
+              >
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full -translate-y-10 translate-x-10 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-blue-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <span className="material-symbols-outlined text-white text-2xl">
+                      auto_stories
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    O'quv materiallari
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                    Elektron darsliklar, ma'ruzalar va o'quv materiallarini
+                    o'rganing
+                  </p>
+                  <div className="mt-4 flex items-center text-blue-600 dark:text-blue-400 font-medium text-sm group-hover:translate-x-2 transition-transform">
+                    <span>Ko'rish</span>
+                    <span className="material-symbols-outlined ml-1 text-sm">
+                      arrow_forward
+                    </span>
+                  </div>
+                </div>
+              </Link>
+
+              <Link
+                to="/videos"
+                className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 dark:border-gray-700"
+              >
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full -translate-y-10 translate-x-10 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-purple-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <span className="material-symbols-outlined text-white text-2xl">
+                      movie
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                    Video darslar
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                    Interaktiv video darslarni tomosha qiling va o'rganing
+                  </p>
+                  <div className="mt-4 flex items-center text-purple-600 dark:text-purple-400 font-medium text-sm group-hover:translate-x-2 transition-transform">
+                    <span>Tomosha qilish</span>
+                    <span className="material-symbols-outlined ml-1 text-sm">
+                      arrow_forward
+                    </span>
+                  </div>
+                </div>
+              </Link>
+
+              <Link
+                to="/tests"
+                className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 dark:border-gray-700 sm:col-span-2 lg:col-span-1"
+              >
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full -translate-y-10 translate-x-10 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-green-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <span className="material-symbols-outlined text-white text-2xl">
+                      quiz
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                    Testlar
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                    Bilimingizni tekshiring va natijalaringizni kuzating
+                  </p>
+                  <div className="mt-4 flex items-center text-green-600 dark:text-green-400 font-medium text-sm group-hover:translate-x-2 transition-transform">
+                    <span>Test topshirish</span>
+                    <span className="material-symbols-outlined ml-1 text-sm">
+                      arrow_forward
+                    </span>
+                  </div>
+                </div>
+              </Link>
             </div>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 mt-16">
+      <footer className="w-full bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 ">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-sm text-gray-500 dark:text-gray-400">

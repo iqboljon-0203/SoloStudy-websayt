@@ -1,9 +1,58 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { videos } from "../data/videos";
 const Videos = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [videoTitles, setVideoTitles] = useState({});
+
+  // YouTube video titlelarini olish funksiyasi
+  const getYouTubeTitle = async (videoId) => {
+    try {
+      const response = await fetch(
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(
+          `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
+        )}`
+      );
+      const data = await response.json();
+      return data.title || "YouTube Video";
+    } catch (error) {
+      console.error("Error fetching YouTube title:", error);
+      return "YouTube Video";
+    }
+  };
+
+  // Video ID ni URL dan olish
+  const getVideoId = (url) => {
+    try {
+      const u = new URL(url);
+      if (u.hostname === "youtu.be") {
+        return u.pathname.slice(1);
+      }
+      if (u.hostname.includes("youtube.com")) {
+        return u.searchParams.get("v");
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  // Barcha videolar uchun titlelarni olish
+  useEffect(() => {
+    const fetchTitles = async () => {
+      const titles = {};
+      for (const video of videos) {
+        const videoId = getVideoId(video.url);
+        if (videoId) {
+          const title = await getYouTubeTitle(videoId);
+          titles[video.id] = title;
+        }
+      }
+      setVideoTitles(titles);
+    };
+    fetchTitles();
+  }, []);
   const toEmbed = (url) => {
     if (!url) return "";
     try {
@@ -20,15 +69,19 @@ const Videos = () => {
       return url;
     }
   };
-  const qrFor = (url) => `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(url)}`;
+  const qrFor = (url) =>
+    `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(url)}`;
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm mb-4">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-4 hover:opacity-80 transition-opacity"
+          >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-6 w-6 text-[#A7D9FF]"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -39,10 +92,13 @@ const Videos = () => {
                 ></path>
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              SoloStudy
+            <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
+              <span className="hidden sm:inline">
+                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+              </span>
+              <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
-          </div>
+          </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
             <a
@@ -84,7 +140,7 @@ const Videos = () => {
             </a>
           </nav>
 
-              <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <a
               href="/about"
               className="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all hover:shadow-lg bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
@@ -162,15 +218,33 @@ const Videos = () => {
         )}
       </header>
 
-      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 gap-8">
+      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter mb-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-white dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
+            Video Darslar
+          </h1>
+          <p className="text-lg sm:text-xl lg:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            Ta'lim videolarini tomosha qiling va QR kod orqali mobil
+            qurilmalarda oching.
+            <span className="text-primary font-semibold">YouTube</span>{" "}
+            platformasidagi sifatli ta'lim kontentlari bilan bilimingizni
+            oshiring.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-12">
           {videos.map((v) => (
-            <div key={v.id} className="bg-background-light dark:bg-background-dark rounded-xl shadow-lg overflow-hidden">
+            <div
+              key={v.id}
+              className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
+            >
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                {/* Video Section */}
                 <div className="lg:col-span-2">
-                  <div className="aspect-video w-full">
+                  <div className="aspect-video w-full bg-gray-100 dark:bg-gray-800">
                     <iframe
-                      className="w-full h-full"
+                      className="w-full h-full rounded-t-2xl lg:rounded-t-2xl lg:rounded-l-2xl lg:rounded-r-none"
                       src={toEmbed(v.url)}
                       title={v.title}
                       frameBorder="0"
@@ -179,16 +253,38 @@ const Videos = () => {
                     ></iframe>
                   </div>
                 </div>
-                <div className="p-6 flex flex-col items-center justify-center gap-4">
-                  <h3 className="text-lg font-semibold text-background-dark dark:text-background-light text-center">QR orqali oching</h3>
-                  <div className="bg-white p-3 rounded-lg">
-                    <img alt="QR Code" className="w-40 h-40" src={qrFor(v.url)} />
+
+                {/* QR Code Section */}
+                <div className="bg-gradient-to-br from-primary/10 to-primary/20 dark:from-primary/20 dark:to-primary/30 p-8 flex flex-col items-center justify-center gap-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary/30 dark:from-primary/30 dark:to-primary/40 rounded-xl shadow-lg">
+                      <span className="material-symbols-outlined text-primary text-3xl">
+                        qr_code_scanner
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                      QR kod orqali oching
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                      Mobil qurilmangizda QR kodni skanerlang va videoni oching
+                    </p>
+                  </div>
+
+                  <div className="bg-white dark:bg-gray-100 p-4 rounded-xl shadow-lg">
+                    <img
+                      alt="QR Code"
+                      className="w-32 h-32"
+                      src={qrFor(v.url)}
+                    />
                   </div>
                 </div>
               </div>
-              <div className="p-6">
-                <h2 className="text-xl font-bold text-background-dark dark:text-background-light mb-2">{v.title}</h2>
-                <p className="text-background-dark/70 dark:text-background-light/70 text-sm">{v.description}</p>
+
+              {/* Video Info Section */}
+              <div className="p-8 bg-white dark:bg-gray-800/50">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                  {videoTitles[v.id] || v.title}
+                </h2>
               </div>
             </div>
           ))}

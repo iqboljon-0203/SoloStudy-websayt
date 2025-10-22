@@ -10,19 +10,30 @@ const Materials = () => {
   const [level, setLevel] = useState("");
 
   const subjects = useMemo(() => {
-    const s = Array.from(new Set(staticPptx.map((x) => x.subject).filter(Boolean)));
+    const s = Array.from(
+      new Set(staticPptx.map((x) => x.subject).filter(Boolean))
+    );
     return s.sort();
   }, []);
   const topics = useMemo(() => {
-    const s = Array.from(new Set(staticPptx.map((x) => x.topic).filter(Boolean)));
+    const s = Array.from(
+      new Set(staticPptx.map((x) => x.topic).filter(Boolean))
+    );
     return s.sort();
   }, []);
   const levels = useMemo(() => {
-    const s = Array.from(new Set(staticPptx.map((x) => x.level).filter(Boolean)));
+    const s = Array.from(
+      new Set(staticPptx.map((x) => x.level).filter(Boolean))
+    );
     return s.sort();
   }, []);
   const filteredStatic = useMemo(() => {
-    return staticPptx.filter((x) => (!subj || x.subject === subj) && (!topic || x.topic === topic) && (!level || x.level === level));
+    return staticPptx.filter(
+      (x) =>
+        (!subj || x.subject === subj) &&
+        (!topic || x.topic === topic) &&
+        (!level || x.level === level)
+    );
   }, [subj, topic, level]);
 
   // Supabase removed: only static PPTX materials are displayed below
@@ -32,10 +43,13 @@ const Materials = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm mb-4">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-4 hover:opacity-80 transition-opacity"
+          >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-6 w-6 text-[#A7D9FF]"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -46,10 +60,13 @@ const Materials = () => {
                 ></path>
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              SoloStudy
+            <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
+              <span className="hidden sm:inline">
+                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+              </span>
+              <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
-          </div>
+          </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
             <a
@@ -170,27 +187,36 @@ const Materials = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow container mx-auto px-6 py-12 ">
+      <main className="flex-grow container mx-auto px-6 py-12">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            O'quv Materiallari
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Kurslar uchun materiallarni toping va yuklab oling.
-          </p>
+          {/* Hero Section */}
+          <div className="text-center mb-16">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter mb-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-white dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
+              O'quv Materiallari
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Kurslar uchun materiallarni toping va yuklab oling. Turli xil
+              formatidagi ta'lim materiallari bilan bilimingizni oshiring.
+            </p>
+          </div>
 
           {/* Filters */}
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div className="flex flex-wrap gap-4">
+          <div className="bg-gradient-to-r from-white/80 to-gray-50/80 dark:from-gray-900/80 dark:to-gray-800/80 backdrop-blur-sm rounded-xl p-4 mb-8 shadow-lg border border-gray-200/50 dark:border-gray-700/50">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 text-center">
+              Materiallarni filtrlash
+            </h3>
+            <div className="flex flex-wrap items-center justify-center gap-3">
               <div className="relative">
                 <select
                   value={subj}
                   onChange={(e) => setSubj(e.target.value)}
-                  className="bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm focus:ring-2 focus:ring-primary/20 focus:border-primary min-w-[140px]"
                 >
                   <option value="">Fan (barchasi)</option>
                   {subjects.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -198,11 +224,13 @@ const Materials = () => {
                 <select
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
-                  className="bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm focus:ring-2 focus:ring-primary/20 focus:border-primary min-w-[140px]"
                 >
                   <option value="">Mavzu (barchasi)</option>
                   {topics.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -210,11 +238,13 @@ const Materials = () => {
                 <select
                   value={level}
                   onChange={(e) => setLevel(e.target.value)}
-                  className="bg-white dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm focus:ring-2 focus:ring-primary/20 focus:border-primary min-w-[140px]"
                 >
                   <option value="">Daraja (barchasi)</option>
                   {levels.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -223,24 +253,41 @@ const Materials = () => {
 
           {filteredStatic.length > 0 && (
             <div className="mb-12">
-             
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredStatic.map((sp) => (
-                  <div key={sp.id} className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-                    <div className="relative p-4 flex-grow flex flex-col justify-between">
+                  <div
+                    key={sp.id}
+                    className="group bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 flex flex-col border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
+                  >
+                    <div className="relative p-6 flex-grow flex flex-col justify-between">
                       <div>
-                        <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                          <span className="material-symbols-outlined text-primary text-4xl">slideshow</span>
+                        <div className="w-16 h-16 mb-4 flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary/30 dark:from-primary/30 dark:to-primary/40 rounded-xl shadow-lg">
+                          <span className="material-symbols-outlined text-primary text-3xl">
+                            slideshow
+                          </span>
                         </div>
-                        <h3 className="font-bold text-gray-900 dark:text-white mb-1">{sp.title}</h3>
-                        <p className="text-xs text-gray-400 dark:text-gray-500">PPTX</p>
+                        <h3 className="font-bold text-gray-900 dark:text-white mb-2 text-lg leading-tight">
+                          {sp.title}
+                        </h3>
+                        <div className="flex items-center gap-2 mb-4">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                            PPTX
+                          </span>
+                          {sp.subject && (
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                              {sp.subject}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <a
                         href={sp.href}
                         download
-                        className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm"
+                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-3 rounded-xl text-sm font-bold hover:shadow-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:from-blue-700 hover:to-blue-800"
                       >
-                        <span className="material-symbols-outlined text-base">download</span>
+                        <span className="material-symbols-outlined text-base">
+                          download
+                        </span>
                         Yuklab olish
                       </a>
                     </div>
@@ -250,7 +297,21 @@ const Materials = () => {
             </div>
           )}
           {filteredStatic.length === 0 && (
-            <div className="mb-12 text-center text-gray-500 dark:text-gray-400">Tanlangan filtrlar bo'yicha fayllar topilmadi.</div>
+            <div className="mb-12 text-center py-16">
+              <div className="w-24 h-24 mx-auto mb-6 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full">
+                <span className="material-symbols-outlined text-gray-400 dark:text-gray-500 text-4xl">
+                  search_off
+                </span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Materiallar topilmadi
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+                Tanlangan filtrlar bo'yicha fayllar topilmadi. Filtrlarni
+                o'zgartiring yoki barcha materiallarni ko'rish uchun filtrlarni
+                tozalang.
+              </p>
+            </div>
           )}
         </div>
       </main>

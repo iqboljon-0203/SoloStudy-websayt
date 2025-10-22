@@ -1,36 +1,134 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { libraryFiles } from "../data/libraryFiles";
-const Library = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [author, setAuthor] = useState("");
-    const [title, setTitle] = useState("");
-    const [topic, setTopic] = useState("");
-    const [year, setYear] = useState("");
-    const [q, setQ] = useState("");
 
-    const authors = useMemo(() => Array.from(new Set(libraryFiles.map(f => f.author).filter(Boolean))).sort(), []);
-    const titles = useMemo(() => Array.from(new Set(libraryFiles.map(f => f.title).filter(Boolean))).sort(), []);
-    const topics = useMemo(() => Array.from(new Set(libraryFiles.map(f => f.topic).filter(Boolean))).sort(), []);
-    const years = useMemo(() => Array.from(new Set(libraryFiles.map(f => f.year).filter(Boolean))).sort((a,b)=>a-b), []);
-    const filtered = useMemo(() => {
-      const qlc = q.trim().toLowerCase();
-      return libraryFiles.filter(f =>
-        (!author || f.author === author) &&
-        (!title || f.title === title) &&
-        (!topic || f.topic === topic) &&
-        (!year || String(f.year) === String(year)) &&
-        (!qlc || [f.author, f.title, f.topic, f.subject].filter(Boolean).some(x => String(x).toLowerCase().includes(qlc)))
-      );
-    }, [author, title, topic, year, q]);
+const Library = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Public/library dagi fayllar ro'yxati
+  const libraryFiles = [
+    {
+      id: "lib-1",
+      title: "Boshlang'ich ta'lim pedagogikasi",
+      filename: "boshlangichtalimpedagogikasioquvqollanma2.pdf",
+      cover: "/library/Posters/Бошлангич таълим педагогикаси.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-2",
+      title: "Boshlang'ich ta'lim pedagogikasi (2)",
+      filename: "boshlangichtalimpedagogikasioquvqollanma2 (2).pdf",
+      cover: "/library/Posters/Бошланғич таълим педагогикаси.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-3",
+      title: "BT Pedagogikasi",
+      filename: "btpedagogikasi21082025.pdf",
+      cover: "/library/Posters/БОшлангисч таълим.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-4",
+      title: "Nashrga Boshlang'ich ta'lim pedagogikasi Qo'llanma",
+      filename: "Nashrga_Boshlang'ich_ta'lim_pedagogikasi_Qo'llanma.pdf",
+      cover: "/library/Posters/Ўқув қўлланма.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-5",
+      title: "Spring Congress tam metin E KITAP",
+      filename: "Spring Congress tam metin E KITAP-06- (1).pdf",
+      cover: "/library/Posters/Снимок.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-6",
+      title: "Darslik",
+      filename: "дарслик25я.pdf",
+      cover: "/library/Posters/Панжиева Муаттар.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-7",
+      title: "Pед конф кулланма",
+      filename: "Пед конф кулланма.pdf",
+      cover: "/library/Posters/Умумий педагокига назарияси ва амалиёти.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-8",
+      title: "Pedagogika tarixi",
+      filename: "1753329580.pdf",
+      cover: "/library/Posters/Педагогика тарихи.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-9",
+      title: "Pedagogika tarixi - Toshтемирова",
+      filename: "1755148932.pdf",
+      cover: "/library/Posters/Педагогика тарихи Тоштемирова.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-10",
+      title: "Pedagogika tarixi - 3",
+      filename: "1757141513.pdf",
+      cover: "/library/Posters/Педагогика тарихи.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-11",
+      title: "Pedagogika tarixi - 4",
+      filename: "1757483382.pdf",
+      cover: "/library/Posters/Педагогика тарихи.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-12",
+      title: "Pedagogika tarixi - 5",
+      filename: "1760611099.pdf",
+      cover: "/library/Posters/Педагогика тарихи.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+    {
+      id: "lib-13",
+      title: "Pedagogika tarixi - 6",
+      filename: "1760767219.pdf",
+      cover: "/library/Posters/Педагогика тарихи.PNG",
+      type: "pdf",
+      year: 2025,
+    },
+  ];
+
+  // Qidiruv natijalari
+  const filteredFiles = libraryFiles.filter((file) =>
+    file.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="relative flex min-h-screen w-full flex-col">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-4 hover:opacity-80 transition-opacity"
+          >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-6 w-6 text-[#A7D9FF]"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -41,10 +139,13 @@ const Library = () => {
                 ></path>
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              SoloStudy
+            <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
+              <span className="hidden sm:inline">
+                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+              </span>
+              <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
-          </div>
+          </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
             <a
@@ -86,7 +187,7 @@ const Library = () => {
             </a>
           </nav>
 
-               <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <a
               href="/about"
               className="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold tracking-wide transition-all hover:shadow-lg bg-primary/20 text-primary-light dark:text-primary hover:bg-primary/30 dark:bg-primary/20 dark:hover:bg-primary/30"
@@ -163,86 +264,106 @@ const Library = () => {
           </div>
         )}
       </header>
-      <div className="px-4 md:px-10 lg:px-20 xl:px-40 flex flex-1 justify-center py-10">
-        <div className="layout-content-container flex flex-col w-full max-w-7xl">
-          <div className="flex flex-wrap justify-between items-center gap-4 p-4">
-            <div className="flex flex-col gap-2">
-              <p className="text-background-dark dark:text-background-light text-4xl font-bold leading-tight tracking-tight">
-                Raqamli Kutubxona
-              </p>
-              <p className="text-background-dark/60 dark:text-background-light/60 text-base font-normal leading-normal">
-                Elektron kitoblar, ilmiy maqolalar va materiallar kutubxonasi.
-              </p>
-            </div>
+      <main className="flex-grow container mx-auto px-6 py-10">
+        <div className="max-w-6xl mx-auto">
+          {/* Hero Section */}
+          <div className="text-center mb-16 mt-8">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter mb-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-white dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
+              Raqamli Kutubxona
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Elektron kitoblar, ilmiy maqolalar va materiallar kutubxonasi.
+              Barcha fayllarni bepul yuklab oling.
+            </p>
           </div>
-          <div className="p-4">
-            <div className="relative w-full">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-background-dark/60 dark:text-background-light/60">
+
+          {/* Search Section */}
+          <div className="bg-gradient-to-r from-white/80 to-gray-50/80 dark:from-gray-900/80 dark:to-gray-800/80 backdrop-blur-sm rounded-xl p-6 mb-8 shadow-lg border border-gray-200/50 dark:border-gray-700/50">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 dark:text-gray-500">
                 <span className="material-symbols-outlined">search</span>
               </div>
               <input
-                className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-background-dark dark:text-background-light focus:outline-none focus:ring-2 focus:ring-primary border-none bg-background-light/70 dark:bg-background-dark/70 h-12 placeholder:text-background-dark/60 dark:placeholder:text-background-light/60 pl-12 pr-4 text-base font-normal leading-normal"
-                placeholder="Muallif, sarlavha, mavzu yoki yil bo'yicha qidiring"
-                value={q}
-                onChange={(e)=>setQ(e.target.value)}
+                type="text"
+                placeholder="Kitob nomi bo'yicha qidiring..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               />
             </div>
           </div>
-          <div className="flex gap-3 p-4 flex-wrap">
-            <select value={author} onChange={(e)=>setAuthor(e.target.value)} className="h-10 rounded-lg bg-primary/20 dark:bg-primary/30 pl-4 pr-3 text-primary hover:bg-primary/30 dark:hover:bg-primary/40 transition-colors">
-              <option value="">Muallif (barchasi)</option>
-              {authors.map(a=> <option key={a} value={a}>{a}</option>)}
-            </select>
-            <select value={title} onChange={(e)=>setTitle(e.target.value)} className="h-10 rounded-lg bg-background-light/70 dark:bg-background-dark/70 pl-4 pr-3 text-background-dark/80 dark:text-background-light/80 hover:bg-background-light/90 dark:hover:bg-background-dark/90 transition-colors">
-              <option value="">Sarlavha (barchasi)</option>
-              {titles.map(t=> <option key={t} value={t}>{t}</option>)}
-            </select>
-            <select value={topic} onChange={(e)=>setTopic(e.target.value)} className="h-10 rounded-lg bg-background-light/70 dark:bg-background-dark/70 pl-4 pr-3 text-background-dark/80 dark:text-background-light/80 hover:bg-background-light/90 dark:hover:bg-background-dark/90 transition-colors">
-              <option value="">Mavzu (barchasi)</option>
-              {topics.map(t=> <option key={t} value={t}>{t}</option>)}
-            </select>
-            <select value={year} onChange={(e)=>setYear(e.target.value)} className="h-10 rounded-lg bg-background-light/70 dark:bg-background-dark/70 pl-4 pr-3 text-background-dark/80 dark:text-background-light/80 hover:bg-background-light/90 dark:hover:bg-background-dark/90 transition-colors">
-              <option value="">Yil (barchasi)</option>
-              {years.map(y=> <option key={y} value={y}>{y}</option>)}
-            </select>
-          </div>
-          <div className="p-4 space-y-8">
-            <div>
-              <h2 className="text-background-dark dark:text-background-light text-2xl font-bold leading-tight tracking-tight px-4 pb-4">
-                Kutubxona fayllari
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
-                {filtered.map((f) => (
-                  <div key={f.id} className="group bg-white dark:bg-gray-800/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
-                    <div className="relative p-4 flex-grow flex flex-col justify-between">
-                      <div>
-                        <div className="w-16 h-16 mb-4 flex items-center justify-center bg-primary/20 dark:bg-primary/30 rounded-lg">
-                          <span className="material-symbols-outlined text-primary text-4xl">
-                            {f.type === "ppt" || f.type === "pptx" ? "slideshow" : f.type === "pdf" ? "picture_as_pdf" : "description"}
-                          </span>
-                        </div>
-                        <h3 className="font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">{f.title}</h3>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 uppercase">{f.type} • {f.author} • {f.topic} • {f.year}</p>
-                      </div>
-                      <a
-                        href={f.href}
-                        download
-                        className="mt-4 w-full flex items-center justify-center gap-2 bg-primary text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm"
-                      >
-                        <span className="material-symbols-outlined text-base">download</span>
-                        Yuklab olish
-                      </a>
+
+          {/* Library Files Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredFiles.map((file) => (
+              <div
+                key={file.id}
+                className="group bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
+              >
+                <div className="flex h-48">
+                  {/* Cover Image */}
+                  <div className="w-1/3 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                    <img
+                      src={file.cover}
+                      alt={file.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "flex";
+                      }}
+                    />
+                    <div className="w-full h-full bg-primary/20 dark:bg-primary/30 flex items-center justify-center hidden">
+                      <span className="material-symbols-outlined text-primary text-4xl">
+                        picture_as_pdf
+                      </span>
                     </div>
                   </div>
-                ))}
+
+                  {/* Content */}
+                  <div className="w-2/3 p-6 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                        {file.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 uppercase">
+                        {file.type} • {file.year}
+                      </p>
+                    </div>
+
+                    <a
+                      href={`/library/${file.filename}`}
+                      download
+                      className="w-full flex items-center justify-center gap-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-3 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:from-blue-700 hover:to-blue-800"
+                    >
+                      <span className="material-symbols-outlined text-sm">
+                        download
+                      </span>
+                      Yuklab olish
+                    </a>
+                  </div>
+                </div>
               </div>
-              {filtered.length === 0 && (
-                <div className="text-center text-gray-500 dark:text-gray-400 px-4">Tanlangan filtrlar bo'yicha fayl topilmadi.</div>
-              )}
-            </div>
+            ))}
           </div>
+
+          {filteredFiles.length === 0 && (
+            <div className="text-center py-16">
+              <div className="w-24 h-24 mx-auto mb-6 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full">
+                <span className="material-symbols-outlined text-gray-400 text-4xl">
+                  search_off
+                </span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Hech narsa topilmadi
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Qidiruv so'rovingiz bo'yicha kitob topilmadi. Boshqa kalit
+                so'zlar bilan qayta urinib ko'ring.
+              </p>
+            </div>
+          )}
         </div>
-      </div>
+      </main>
       <footer className="w-full bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
@@ -327,86 +448,5 @@ const Library = () => {
     </div>
   );
 };
-
-const featuredBooks = [
-  {
-    title: "O'qitish san'ati",
-    author: "Muallif: Dr. Emily Carter",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBtviaD5m58S63r-iGnXsx0eRPhD57_cnyZDFt0PHCM1mX7Oga3ngaDjN5nPME5b4w34sGTb29K9pYVhy9inJhJlzF46qZSvl9Bd9cFdcZH0E66dgxwtJiRPG2VMiGhIiJm0d6-ajvyWJasgjB08nJU9jnq24NrE8AO7ptPWynaqD4yGxqG-n5uTzRPo6PRNbmSx38W1wcoCwNjH25cCzFg7hBNPFffB5Y1pm4K42GTw3ZuOpgFf-grLZN0LM9fIrIsBOaLWuzsVAg",
-  },
-  {
-    title: "Ta'lim psixologiyasi",
-    author: "Muallif: Prof. David Lee",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDpfVpitrE5uSCpLCo6v7D6wXwScdcArzgfR0lbU5T2Ghvi74W2Rc-acNzzZh442i2rRI5-rzxiO2LitH2ekPt-J8MfiBaUJO66XgV0bAukTQfyZAraPgMphEWIdoz7HoaqdHeOj-pWZ_vfYeq3sakZi5-oTdAQ3p56jxta6Au7J6ieEN461-uVdw8-Pgi6Cvf_l5gQboIuXRCWq4e6JhjLPF4FA3wHXk3gJWP4VGvfz8Z6h77sJrTabKnMQmTzCsvL4DpMZiokYIo",
-  },
-  {
-    title: "Sinfni boshqarish",
-    author: "Muallif: Ms. Sarah Johnson",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuC0AFIorqmzjN_ndXcb-S2JUHI2XM9wJQNISqa3Yp0DQW-2dhBdhut0fDNgrnj-PC7vVlh4AQ7tTHISj4h-O2UwE5sk5tR_JBc2MJe7i4kOeUHeoUno1D6YLuRpzIikQaUI8De6M5Qv6prKtsJwgSlSfd3eOnmJ9CeXdWQMcelJE2xS0DmUatojLwSOokiArzPSlzA4SMAoDooFynuQml2Dqfq2USI9EBDnI9NNuYn2UCZWZTqS98D6BXbzaW-ZW6yN4deWyWr4Y_k",
-  },
-  {
-    title: "Samarali ta'lim",
-    author: "Muallif: Mr. Michael Brown",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAmuhGpVWX6VjMdsJrLQBvCJ_lLGmV_NMipO_PfMmxXBPGJYjRuwBiQbjaKgK8wPKCq_4z7NjMrydU5WI13L3HPGjkrwsaukILElwaO4nUL8OHiyRpw6nbTmSzBXw55Ul6a3sWEqjETZMCtOvRbqW3hNOKd9ZmJ4Fj5oQJJMrwlBsS9vz3sYTspvTPQseO2y_hgbwzajWXUC6qEv6y30pJTO8o6PnzUiEvNgM7iccGi_66tmty2kHwp4xZCGSXCukJutVa1-mAvl1U",
-  },
-  {
-    title: "Baholash",
-    author: "Muallif: Dr. Olivia Davis",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDEz2Vom0Jr4B1rzcyILsANektQ8OGSbYDJLXEvFqjFhknZ1rNjsgKHXV3tuVBVScQwd-HN6fu6WXvNnjHOyc22brCuzOwaaMvRFkyQNuhl3_SEx672VWvuArm5ds73H98kQfc5RpWxgkpmQMwWCT42E-5yfWpPDS16BvVAouaJflW8XdjHZErJnq__NMoiqmg6MvtodmX2JGz_CnFN0wWnIRb67_SIuYjf9i6-uL5WmFjBb5u8hJ7zc2WNImbcmt2VWfu9RSzo1i4",
-  },
-  {
-    title: "O'quv dasturi",
-    author: "Muallif: Prof. Robert Wilson",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCy1iZil9cFkdm_n9zMOfVkpKcJ6dc8i5ZgbGk0k5DViaoTBpMvXMvMpktykRBr-4--oSLQnM6RCCCsjNudKK62_f9JLOQCCTXdxcivM33Wn1uqfcj8TUjepkAf6P5DijNdEyFDiqp-aRl-uDUsSGSALy-ujwV0MYwLEh2JUEJ7Ohey4UHPqn63S1OJGxj8GWbXQ255aw9XDNapM3Outa0MK_F8oMbghWBmPMWf-PYMt0olb1lsDmWnWkxMk6JaiIbe0YeQiTI0wtE",
-  },
-];
-
-const recentBooks = [
-  {
-    title: "Innovatsion o'qitish usullari",
-    author: "Muallif: Dr. Sophia Clark",
-    description:
-      "Zamonaviy sinflarda o'quvchilarning faolligini va tanqidiy fikrlashni rivojlantirish uchun yangi pedagogik yondashuvlarni o'rganish.",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAY7VVMzM6OR5vaI08EUh6NIE0O6ck7YyvRQkz5G3CsN2r4APuPeruGPKQ-DWathOMqvhGXEgPdEuxQTLXFwippxReTyXA5ugJgDwYfFgW4kgAsocPw1pP9xJbKFbqmL4iiORnEh-8E3kwQCTrqYALHL03ph1yt-lA2thOEf4OShT4k2stOEuFpneDI55-EMaDHE3pAQ_8ixsfU5KGGtfYV_6aFROftvQmg4wmfoXky6ifsR5wXEDMC14mZHVKvJfyxLSIpgp9h2sc",
-  },
-  {
-    title: "Raqamli davrdagi ta'lim",
-    author: "Muallif: Prof. Ethan Green",
-    description:
-      "Ta'limda texnologiyaning muammolari va imkoniyatlarini o'rganish.",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAYtbUqQuZ-KI08rpiSwNR-envnvd01sbO1qoSoJU9sqEIo4hYschAG3-B0MhDj8nKwhk5lnykaWrXw0eYHPnuMJAin-ex8Y07010GYPeTAK4qkugHtdLEanMI3ST3WPRjdZVbF-g1hKW_3TwJpPWKpjNIuKxU3vMYhdwn3hR9ueOA4yy_czbjSejMU676iDDfgdCCrw5fGiYmFYxfwE8VI62zYiJW98zCm2zYegVKqWqSXXCCpnMqu2UjzIHODXDoowGEiTLdmAlU",
-  },
-  {
-    title: "Inklyuziv ta'lim",
-    author: "Muallif: Ms. Chloe Harris",
-    description: "Barcha o'quvchilar uchun teng ta'lim muhitini yaratish.",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAl7Iev9ko8OeegMarDgxF5ReuktQcy-cYD1IR0vruxc260QB0xXPGcbtJzdnaMgGJWcY1rekWxXmaI9MvT67D6dpsvEqcaS1bcALTvd9B9Kdxkwcd4zMP5LcPWk_XaZfqP9hNIS4nlyog0--g4b6Rp1sSj94PzpVNCI6jqgatG4BC6g6mmQUikyPa2HNfJTMAxehcDarlWaplDa2Ag9L69dZEkitn0A2pMVbt1D9SbMcowuRv6DGWG9hCwZsxntnXbLu7PnGXuP6w",
-  },
-  {
-    title: "O'qituvchilar uchun resurslar",
-    author: "Muallif: Dr. Anna Martinez",
-    description:
-      "Dars rejalari, ishchi varaqalar va baholash namunalarini o'z ichiga oladi.",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDpfVpitrE5uSCpLCo6v7D6wXwScdcArzgfR0lbU5T2Ghvi74W2Rc-acNzzZh442i2rRI5-rzxiO2LitH2ekPt-J8MfiBaUJO66XgV0bAukTQfyZAraPgMphEWIdoz7HoaqdHeOj-pWZ_vfYeq3sakZi5-oTdAQ3p56jxta6Au7J6ieEN461-uVdw8-Pgi6Cvf_l5gQboIuXRCWq4e6JhjLPF4FA3wHXk3gJWP4VGvfz8Z6h77sJrTabKnMQmTzCsvL4DpMZiokYIo",
-  },
-  {
-    title: "Ta'limda baholash",
-    author: "Muallif: Dr. Olivia Davis",
-    description:
-      "Formativ va summativ baholash usullari haqida amaliy qo'llanma.",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDEz2Vom0Jr4B1rzcyILsANektQ8OGSbYDJLXEvFqjFhknZ1rNjsgKHXV3tuVBVScQwd-HN6fu6WXvNnjHOyc22brCuzOwaaMvRFkyQNuhl3_SEx672VWvuArm5ds73H98kQfc5RpWxgkpmQMwWCT42E-5yfWpPDS16BvVAouaJflW8XdjHZErJnq__NMoiqmg6MvtodmX2JGz_CnFN0wWnIRb67_SIuYjf9i6-uL5WmFjBb5u8hJ7zc2WNImbcmt2VWfu9RSzo1i4",
-  },
-];
 
 export default Library;

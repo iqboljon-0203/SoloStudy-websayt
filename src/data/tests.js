@@ -2,7 +2,8 @@ export const topics = [
   {
     id: "topic1",
     title:
-      "Pedagogika tarixi fan sifatida (Eng qadimgi davrlardan VI asrgacha) – 30 ta test",
+      "Pedagogika tarixi fan sifatida (Eng qadimgi davrlardan VI asrgacha)",
+    description: "30 ta test savol",
     questions: [
       {
         id: 1,
@@ -58,7 +59,11 @@ export const topics = [
         options: [
           { id: "A", text: "Texnologik bilim berish", isCorrect: false },
           { id: "B", text: "Yozma bilimlarni oshirish", isCorrect: false },
-          { id: "C", text: "Axloqiy va ma’naviy tarbiya berish", isCorrect: true },
+          {
+            id: "C",
+            text: "Axloqiy va ma’naviy tarbiya berish",
+            isCorrect: true,
+          },
           { id: "D", text: "Musiqa o‘rgatish", isCorrect: false },
         ],
       },
@@ -68,7 +73,11 @@ export const topics = [
         options: [
           { id: "A", text: "Gazeta va jurnallar", isCorrect: false },
           { id: "B", text: "Radio dasturlar", isCorrect: false },
-          { id: "C", text: "Afsona, rivoyat va diniy matnlar", isCorrect: true },
+          {
+            id: "C",
+            text: "Afsona, rivoyat va diniy matnlar",
+            isCorrect: true,
+          },
           { id: "D", text: "Televizion dasturlar", isCorrect: false },
         ],
       },
@@ -159,7 +168,11 @@ export const topics = [
         text: "Pedagogikaning qadimgi shakllarida nima asosiy hisoblangan?",
         options: [
           { id: "A", text: "Yozma bilimlar", isCorrect: false },
-          { id: "B", text: "Axloqiy qadriyatlar va ma’naviyat", isCorrect: true },
+          {
+            id: "B",
+            text: "Axloqiy qadriyatlar va ma’naviyat",
+            isCorrect: true,
+          },
           { id: "C", text: "Texnologiya", isCorrect: false },
           { id: "D", text: "Musiqa", isCorrect: false },
         ],
@@ -170,7 +183,11 @@ export const topics = [
         options: [
           { id: "A", text: "Zamonaviy fan asosida", isCorrect: false },
           { id: "B", text: "Texnologik bilimlar asosida", isCorrect: false },
-          { id: "C", text: "Axloqiy va diniy qadriyatlar asosida", isCorrect: true },
+          {
+            id: "C",
+            text: "Axloqiy va diniy qadriyatlar asosida",
+            isCorrect: true,
+          },
           { id: "D", text: "Internet asosida", isCorrect: false },
         ],
       },
@@ -200,7 +217,11 @@ export const topics = [
         options: [
           { id: "A", text: "Radio orqali", isCorrect: false },
           { id: "B", text: "Kompyuter orqali", isCorrect: false },
-          { id: "C", text: "Rivoyatlar, hikoyalar va misollar orqali", isCorrect: true },
+          {
+            id: "C",
+            text: "Rivoyatlar, hikoyalar va misollar orqali",
+            isCorrect: true,
+          },
           { id: "D", text: "Gazeta orqali", isCorrect: false },
         ],
       },
@@ -240,7 +261,11 @@ export const topics = [
         options: [
           { id: "A", text: "Faqat tarixni bilish uchun", isCorrect: false },
           { id: "B", text: "Faqat kitob yozish uchun", isCorrect: false },
-          { id: "C", text: "Ta’lim va tarbiyani yaxshilash uchun", isCorrect: true },
+          {
+            id: "C",
+            text: "Ta’lim va tarbiyani yaxshilash uchun",
+            isCorrect: true,
+          },
           { id: "D", text: "Faqat ilmiy maqola uchun", isCorrect: false },
         ],
       },
@@ -250,7 +275,11 @@ export const topics = [
         options: [
           { id: "A", text: "Internet va televizor", isCorrect: false },
           { id: "B", text: "Gazeta va jurnal", isCorrect: false },
-          { id: "C", text: "Og‘zaki rivoyatlar va amaliy ko‘nikmalar", isCorrect: true },
+          {
+            id: "C",
+            text: "Og‘zaki rivoyatlar va amaliy ko‘nikmalar",
+            isCorrect: true,
+          },
           { id: "D", text: "Video darslar", isCorrect: false },
         ],
       },
@@ -260,7 +289,11 @@ export const topics = [
         options: [
           { id: "A", text: "Dasturiy ta’lim", isCorrect: false },
           { id: "B", text: "Internet maqolalar", isCorrect: false },
-          { id: "C", text: "Rivoyatlar, afsonalar, diniy matnlar", isCorrect: true },
+          {
+            id: "C",
+            text: "Rivoyatlar, afsonalar, diniy matnlar",
+            isCorrect: true,
+          },
           { id: "D", text: "Radio", isCorrect: false },
         ],
       },
@@ -290,7 +323,11 @@ export const topics = [
         options: [
           { id: "A", text: "Faqat texnologik bilim berish", isCorrect: false },
           { id: "B", text: "Faqat adabiy bilim berish", isCorrect: false },
-          { id: "C", text: "Shaxsni axloqiy va ma’naviy rivojlantirish", isCorrect: true },
+          {
+            id: "C",
+            text: "Shaxsni axloqiy va ma’naviy rivojlantirish",
+            isCorrect: true,
+          },
           { id: "D", text: "Faqat siyosiy bilim berish", isCorrect: false },
         ],
       },
@@ -298,9 +335,17 @@ export const topics = [
         id: 28,
         text: "Pedagogika tarixi fanining asosiy vazifasi nima?",
         options: [
-          { id: "A", text: "Kompyuter dasturlarini o‘rganish", isCorrect: false },
+          {
+            id: "A",
+            text: "Kompyuter dasturlarini o‘rganish",
+            isCorrect: false,
+          },
           { id: "B", text: "Musiqani o‘rgatish", isCorrect: false },
-          { id: "C", text: "Ta’lim va tarbiyaning rivojlanish tarixini o‘rganish", isCorrect: true },
+          {
+            id: "C",
+            text: "Ta’lim va tarbiyaning rivojlanish tarixini o‘rganish",
+            isCorrect: true,
+          },
           { id: "D", text: "Sportni rivojlantirish", isCorrect: false },
         ],
       },
@@ -310,7 +355,11 @@ export const topics = [
         options: [
           { id: "A", text: "Kitob va internet", isCorrect: false },
           { id: "B", text: "Radio va televidenie", isCorrect: false },
-          { id: "C", text: "Og‘zaki hikoya va amaliy tajriba", isCorrect: true },
+          {
+            id: "C",
+            text: "Og‘zaki hikoya va amaliy tajriba",
+            isCorrect: true,
+          },
           { id: "D", text: "Film va video", isCorrect: false },
         ],
       },
@@ -320,8 +369,163 @@ export const topics = [
         options: [
           { id: "A", text: "Texnologiya va internetga", isCorrect: false },
           { id: "B", text: "Musiqa va san’atga", isCorrect: false },
-          { id: "C", text: "Og‘zaki rivoyatlar, afsonalar va diniy matnlarga", isCorrect: true },
+          {
+            id: "C",
+            text: "Og‘zaki rivoyatlar, afsonalar va diniy matnlarga",
+            isCorrect: true,
+          },
           { id: "D", text: "Gazeta va jurnalga", isCorrect: false },
+        ],
+      },
+    ],
+  },
+  {
+    id: "topic2",
+    title: "Avesto – eng qadimgi davrlarning madaniy yozma yodgorligi",
+    description: "30 ta test savol",
+    questions: [
+      {
+        id: 1,
+        text: "Avesto qaysi dinning muqaddas kitobi hisoblanadi?",
+        options: [
+          { id: "A", text: "Islom", isCorrect: false },
+          { id: "B", text: "Buddizm", isCorrect: false },
+          { id: "C", text: "Zardushtiylik", isCorrect: true },
+          { id: "D", text: "Xristianlik", isCorrect: false },
+        ],
+      },
+      {
+        id: 2,
+        text: "Avesto qaysi davrda yaratilgan?",
+        options: [
+          { id: "A", text: "XIX asr", isCorrect: false },
+          { id: "B", text: "VIII asr", isCorrect: false },
+          { id: "C", text: "Miloddan avvalgi 6–5 asrlar", isCorrect: true },
+          { id: "D", text: "V asr", isCorrect: false },
+        ],
+      },
+      {
+        id: 3,
+        text: "Avesto qaysi tilda yozilgan?",
+        options: [
+          { id: "A", text: "Arab tili", isCorrect: false },
+          { id: "B", text: "Lotin tili", isCorrect: false },
+          { id: "C", text: "Avesto tili", isCorrect: true },
+          { id: "D", text: "Yunon tili", isCorrect: false },
+        ],
+      },
+      {
+        id: 4,
+        text: "Avesto mazmuni asosan nima haqida?",
+        options: [
+          { id: "A", text: "Tarixiy voqealar", isCorrect: false },
+          { id: "B", text: "Matematika qonunlari", isCorrect: false },
+          {
+            id: "C",
+            text: "Diniy e'tiqod va axloqiy qadriyatlar",
+            isCorrect: true,
+          },
+          { id: "D", text: "Musiqiy asarlar", isCorrect: false },
+        ],
+      },
+      {
+        id: 5,
+        text: "Avestoda nechta asosiy bo'lim mavjud?",
+        options: [
+          { id: "A", text: "2", isCorrect: false },
+          { id: "B", text: "3", isCorrect: false },
+          { id: "C", text: "5", isCorrect: true },
+          { id: "D", text: "7", isCorrect: false },
+        ],
+      },
+    ],
+  },
+  {
+    id: "topic3",
+    title: "VII–XIV asr O'rta Osiyoda tarbiya, maktab va pedagogik fikrlar",
+    description: "30 ta test savol",
+    questions: [
+      {
+        id: 1,
+        text: "VII asrdan XIV asrga qadar O'rta Osiyoda tarbiya kimlar orqali rivojlangan?",
+        options: [
+          { id: "A", text: "Faqat hukmdorlar", isCorrect: false },
+          { id: "B", text: "Faqat savdogarlar", isCorrect: false },
+          {
+            id: "C",
+            text: "Ustozlar, mutafakkirlar va diniy rahbarlar",
+            isCorrect: true,
+          },
+          { id: "D", text: "Faqat askarlar", isCorrect: false },
+        ],
+      },
+      {
+        id: 2,
+        text: "O'sha davr maktablari qaysi asosda tashkil etilgan?",
+        options: [
+          { id: "A", text: "Texnologik bilim asosida", isCorrect: false },
+          { id: "B", text: "Sport va musiqaga asoslangan", isCorrect: false },
+          {
+            id: "C",
+            text: "Diniy va axloqiy qadriyatlar asosida",
+            isCorrect: true,
+          },
+          { id: "D", text: "Siyosiy bilim asosida", isCorrect: false },
+        ],
+      },
+    ],
+  },
+  {
+    id: "topic4",
+    title: "Sharq uyg'onish davrida pedagogik fikrlarning rivojlanishi",
+    description: "30 ta test savol",
+    questions: [
+      {
+        id: 1,
+        text: "Sharq uyg'onish davri qaysi asrlar oralig'ida bo'lgan?",
+        options: [
+          { id: "A", text: "V–VI asrlar", isCorrect: false },
+          { id: "B", text: "XIX asr", isCorrect: false },
+          { id: "C", text: "XIV–XVI asrlar", isCorrect: true },
+          { id: "D", text: "XX asr", isCorrect: false },
+        ],
+      },
+    ],
+  },
+  {
+    id: "topic5",
+    title: "Hadis ilmining paydo bo'lishi. Muxaddislar",
+    description: "30 ta test savol",
+    questions: [
+      {
+        id: 1,
+        text: "Hadis ilmi nima bilan shug'ullanadi?",
+        options: [
+          { id: "A", text: "Faqat tarixni o'rganadi", isCorrect: false },
+          { id: "B", text: "Faqat siyosatni o'rganadi", isCorrect: false },
+          {
+            id: "C",
+            text: "Payg'ambarimiz Muhammad (s.a.v.) so'zlari va amallarini o'rganadi",
+            isCorrect: true,
+          },
+          { id: "D", text: "Faqat matematika", isCorrect: false },
+        ],
+      },
+    ],
+  },
+  {
+    id: "topic6",
+    title: "Sharq uyg'onish davrida didaktik qarashlar",
+    description: "30 ta test savol",
+    questions: [
+      {
+        id: 1,
+        text: "Yusuf Xos Xojib qaysi asari bilan mashhur?",
+        options: [
+          { id: "A", text: "Al-Qonun", isCorrect: false },
+          { id: "B", text: "Al-Muwatta", isCorrect: false },
+          { id: "C", text: "Qutadg'u Bilig", isCorrect: true },
+          { id: "D", text: "Shahname", isCorrect: false },
         ],
       },
     ],

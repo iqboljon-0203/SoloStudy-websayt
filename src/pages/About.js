@@ -1,16 +1,83 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import AuthorImage from "../assets/author.png";
 const About = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    email: "",
+    message: "",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const botToken = "8352865006:AAHTHIl8knh6QQGA-jDlk1h9T9hK696xhLA";
+    const chatId = "647109109";
+
+    const message = `
+📧 Yangi xabar SoloStudy.uz dan:
+
+👤 Ism: ${formData.firstName}
+📧 Email: ${formData.email}
+
+💬 Xabar:
+${formData.message}
+
+⏰ Vaqt: ${new Date().toLocaleString("uz-UZ")}
+    `;
+
+    try {
+      // CORS proxy orqali yuborish
+      const response = await fetch(
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(
+          `https://api.telegram.org/bot${botToken}/sendMessage`
+        )}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: "HTML",
+          }),
+        }
+      );
+
+      if (response.ok) {
+        alert("Xabaringiz muvaffaqiyatli yuborildi!");
+        setFormData({ firstName: "", email: "", message: "" });
+      } else {
+        const errorData = await response.text();
+        console.error("Error response:", errorData);
+        alert("Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-4 hover:opacity-80 transition-opacity"
+          >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-6 w-6 text-[#A7D9FF]"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -21,10 +88,13 @@ const About = () => {
                 ></path>
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              SoloStudy
+            <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
+              <span className="hidden sm:inline">
+                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+              </span>
+              <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
-          </div>
+          </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
             <a
@@ -144,7 +214,7 @@ const About = () => {
         )}
       </header>
       <main className="flex-grow">
-        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="text-center fade-in-up">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
               Jamoamiz bilan tanishing
@@ -161,16 +231,16 @@ const About = () => {
                 Asoschi:
               </h2>
               <div className="mt-10 space-y-8">
-                
-
                 {/* Founder 2 */}
-                <div className="flex flex-col md:flex-row items-start gap-6 bg-white/5 dark:bg-black/5 p-6 rounded-2xl shadow-sm">
-                  <img
-                    alt="Quvondiqova Mohinur Ilhomiddin qizi"
-                    className="w-full md:w-1/3 h-64 md:h-80 object-cover rounded-lg shadow-lg"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHW-w0xGP-JrLxgdKxYQSdYBq1uQyoDLM644hA35fSGL-1GV4C7Fzo8wh_pSofiQaNkWACzuIVy_2-MvCmVvL50ATirKg9a3rBDMtCal7G2mPdIG7o1d2NE6RU_4qitaLvqeKcEJQ0-VxfyNtUhnG9Ajd0kK_gC5qs7s_rhqaIbfYuHE7ahGChMlupmhw2biFex_erDbQkLZzv4MLPq2myvrnJNJB0gs_98FeGPsHwFNb6ugCatZ91hgWaooLXg22oEfk39gJoNWw"
-                  />
-                  <div className="text-center md:text-left">
+                <div className="flex flex-col md:flex-row items-stretch gap-6 bg-white/5 dark:bg-black/5 p-6 rounded-2xl shadow-sm">
+                  <div className="w-full md:w-1/3 md:self-stretch">
+                    <img
+                      alt="Quvondiqova Mohinur Ilhomiddin qizi"
+                      className="w-full h-64 md:h-full object-cover rounded-lg shadow-lg"
+                      src={`${AuthorImage}`}
+                    />
+                  </div>
+                  <div className="text-center md:text-left md:flex-1">
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                       Quvondiqova Mohinur Ilhomiddin qizi
                     </h3>
@@ -200,7 +270,7 @@ const About = () => {
                     <div className="mt-4 flex items-center gap-4 justify-center md:justify-start">
                       <a
                         className="text-gray-400 hover:text-primary"
-                        href="mailto:hello@solostudy.uz"
+                        href="mailto:adpi@edu.uz"
                         aria-label="Email Dr. Ethan Carter"
                       >
                         <span className="material-symbols-outlined">
@@ -209,7 +279,7 @@ const About = () => {
                       </a>
                       <a
                         className="text-gray-400 hover:text-primary"
-                        href="https://solostudy.uz"
+                        href="https://t.me/Maggicha13_14"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="SoloStudy website"
@@ -233,7 +303,7 @@ const About = () => {
                 </p>
               </div>
 
-              <form action="#" method="POST" className="mx-auto mt-10 max-w-xl">
+              <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-xl">
                 <div className="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
                   <div>
                     <label
@@ -245,11 +315,14 @@ const About = () => {
                     <div className="mt-2.5">
                       <input
                         type="text"
-                        name="first-name"
+                        name="firstName"
                         id="first-name"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
                         autoComplete="given-name"
                         className="block w-full rounded-lg border-0 px-3.5 py-2 bg-white/10 dark:bg-black/10 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-all"
                         placeholder="Ismingizni kiriting"
+                        required
                       />
                     </div>
                   </div>
@@ -266,9 +339,12 @@ const About = () => {
                         type="email"
                         name="email"
                         id="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
                         autoComplete="email"
                         className="block w-full rounded-lg border-0 px-3.5 py-2 bg-white/10 dark:bg-black/10 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-all"
                         placeholder="Elektron pochtangizni kiriting"
+                        required
                       />
                     </div>
                   </div>
@@ -284,9 +360,12 @@ const About = () => {
                       <textarea
                         name="message"
                         id="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
                         rows={4}
                         className="block w-full rounded-lg border-0 px-3.5 py-2 bg-white/10 dark:bg-black/10 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-all"
                         placeholder="Xabaringizni kiriting"
+                        required
                       ></textarea>
                     </div>
                   </div>
