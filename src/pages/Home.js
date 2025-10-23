@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { newsData } from "../data/newsData";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,6 +9,7 @@ import Back2 from "../assets/back2.jpg";
 import Back3 from "../assets/back3.jpg";
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [sliderRef, setSliderRef] = useState(null);
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
       {/* Header */}
@@ -32,7 +34,7 @@ const Home = () => {
             </div>
             <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
               <span className="hidden sm:inline">
-                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+                SoloStudy.uz-O'zbek tilidagi mustaqil ta'lim platformasi
               </span>
               <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
@@ -159,7 +161,28 @@ const Home = () => {
       <main className="flex-grow">
         {/* Hero Section with Carousel */}
         <section className="relative">
+          {/* Navigation Buttons */}
+          <button
+            onClick={() => sliderRef?.slickPrev()}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/20 dark:bg-gray-900/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 dark:hover:bg-gray-900/30 transition-all duration-300 hover:scale-110"
+            aria-label="Oldingi slide"
+          >
+            <span className="material-symbols-outlined text-2xl">
+              chevron_left
+            </span>
+          </button>
+          <button
+            onClick={() => sliderRef?.slickNext()}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/20 dark:bg-gray-900/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 dark:hover:bg-gray-900/30 transition-all duration-300 hover:scale-110"
+            aria-label="Keyingi slide"
+          >
+            <span className="material-symbols-outlined text-2xl">
+              chevron_right
+            </span>
+          </button>
+
           <Slider
+            ref={setSliderRef}
             dots={true}
             infinite={true}
             speed={500}
@@ -352,6 +375,104 @@ const Home = () => {
                 <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                   Elektron kitoblar, ilmiy maqolalar va materiallar kutubxonasi.
                 </p>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Latest News Section */}
+        <section className="py-16 sm:py-24 bg-white dark:bg-gray-900">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
+                So'ngi yangiliklar
+              </h2>
+              <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
+              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Ta'lim va pedagogika sohasidagi eng so'nggi yangiliklar va
+                tadqiqotlar
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {newsData.slice(0, 3).map((news) => (
+                <Link
+                  key={news.id}
+                  to="/news"
+                  className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-200/50 dark:border-gray-700/50"
+                >
+                  {/* Image */}
+                  <div className="h-48 bg-gradient-to-br from-primary/20 to-primary/30 dark:from-primary/30 dark:to-primary/40 flex items-center justify-center overflow-hidden">
+                    <img
+                      src={news.image}
+                      alt={news.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "flex";
+                      }}
+                    />
+                    <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/30 dark:from-primary/30 dark:to-primary/40 flex items-center justify-center hidden">
+                      <span className="material-symbols-outlined text-primary text-6xl">
+                        article
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                        {news.category}
+                      </span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {new Date(news.date).toLocaleDateString("uz-UZ")}
+                      </span>
+                    </div>
+
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                      {news.title}
+                    </h3>
+
+                    <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+                      {news.summary}
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="font-medium">{news.author}</span>
+                      </div>
+                      <span className="text-blue-600 hover:text-blue-500 font-medium text-sm transition-colors">
+                        Batafsil →
+                      </span>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {news.tags.slice(0, 2).map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* View All News Button */}
+            <div className="text-center mt-12">
+              <Link
+                to="/news"
+                className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors shadow-lg hover:shadow-xl"
+              >
+                <span>Barcha yangiliklar</span>
+                <span className="material-symbols-outlined text-lg">
+                  arrow_forward
+                </span>
               </Link>
             </div>
           </div>

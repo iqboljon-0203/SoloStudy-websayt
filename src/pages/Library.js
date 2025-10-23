@@ -1,117 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { libraryFiles } from "../data/libraryFiles";
 
 const Library = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // Public/library dagi fayllar ro'yxati
-  const libraryFiles = [
-    {
-      id: "lib-1",
-      title: "Boshlang'ich ta'lim pedagogikasi",
-      filename: "boshlangichtalimpedagogikasioquvqollanma2.pdf",
-      cover: "/library/Posters/Бошлангич таълим педагогикаси.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-2",
-      title: "Boshlang'ich ta'lim pedagogikasi (2)",
-      filename: "boshlangichtalimpedagogikasioquvqollanma2 (2).pdf",
-      cover: "/library/Posters/Бошланғич таълим педагогикаси.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-3",
-      title: "BT Pedagogikasi",
-      filename: "btpedagogikasi21082025.pdf",
-      cover: "/library/Posters/БОшлангисч таълим.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-4",
-      title: "Nashrga Boshlang'ich ta'lim pedagogikasi Qo'llanma",
-      filename: "Nashrga_Boshlang'ich_ta'lim_pedagogikasi_Qo'llanma.pdf",
-      cover: "/library/Posters/Ўқув қўлланма.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-5",
-      title: "Spring Congress tam metin E KITAP",
-      filename: "Spring Congress tam metin E KITAP-06- (1).pdf",
-      cover: "/library/Posters/Снимок.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-6",
-      title: "Darslik",
-      filename: "дарслик25я.pdf",
-      cover: "/library/Posters/Панжиева Муаттар.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-7",
-      title: "Pед конф кулланма",
-      filename: "Пед конф кулланма.pdf",
-      cover: "/library/Posters/Умумий педагокига назарияси ва амалиёти.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-8",
-      title: "Pedagogika tarixi",
-      filename: "1753329580.pdf",
-      cover: "/library/Posters/Педагогика тарихи.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-9",
-      title: "Pedagogika tarixi - Toshтемирова",
-      filename: "1755148932.pdf",
-      cover: "/library/Posters/Педагогика тарихи Тоштемирова.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-10",
-      title: "Pedagogika tarixi - 3",
-      filename: "1757141513.pdf",
-      cover: "/library/Posters/Педагогика тарихи.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-11",
-      title: "Pedagogika tarixi - 4",
-      filename: "1757483382.pdf",
-      cover: "/library/Posters/Педагогика тарихи.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-12",
-      title: "Pedagogika tarixi - 5",
-      filename: "1760611099.pdf",
-      cover: "/library/Posters/Педагогика тарихи.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-    {
-      id: "lib-13",
-      title: "Pedagogika tarixi - 6",
-      filename: "1760767219.pdf",
-      cover: "/library/Posters/Педагогика тарихи.PNG",
-      type: "pdf",
-      year: 2025,
-    },
-  ];
 
   // Qidiruv natijalari
   const filteredFiles = libraryFiles.filter((file) =>
@@ -119,8 +12,8 @@ const Library = () => {
   );
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+    <div className="relative flex min-h-screen w-full flex-col bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
+      <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-gray-900 backdrop-blur-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             to="/"
@@ -141,7 +34,7 @@ const Library = () => {
             </div>
             <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
               <span className="hidden sm:inline">
-                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+                SoloStudy.uz-O'zbek tilidagi mustaqil ta'lim platformasi
               </span>
               <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
@@ -212,7 +105,7 @@ const Library = () => {
         </div>
         {/* Mobile nav */}
         {isMenuOpen && (
-          <div className="lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
+          <div className="lg:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
             <a
               className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
               href="/"
@@ -312,7 +205,7 @@ const Library = () => {
                         e.target.nextSibling.style.display = "flex";
                       }}
                     />
-                    <div className="w-full h-full bg-primary/20 dark:bg-primary/30 flex items-center justify-center hidden">
+                    <div className="w-full h-full bg-primary/20 dark:bg-primary/30 items-center justify-center hidden">
                       <span className="material-symbols-outlined text-primary text-4xl">
                         picture_as_pdf
                       </span>
@@ -331,7 +224,7 @@ const Library = () => {
                     </div>
 
                     <a
-                      href={`/library/${file.filename}`}
+                      href={file.href}
                       download
                       className="w-full flex items-center justify-center gap-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-3 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:from-blue-700 hover:to-blue-800"
                     >
@@ -364,7 +257,7 @@ const Library = () => {
           )}
         </div>
       </main>
-      <footer className="w-full bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 mt-16">
+      <footer className="w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-sm text-gray-500 dark:text-gray-400">

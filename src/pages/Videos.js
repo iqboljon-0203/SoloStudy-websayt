@@ -72,8 +72,8 @@ const Videos = () => {
   const qrFor = (url) =>
     `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(url)}`;
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
-      <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm mb-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 font-display text-gray-800 dark:text-gray-200">
+      <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-gray-900 backdrop-blur-sm mb-4">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             to="/"
@@ -94,7 +94,7 @@ const Videos = () => {
             </div>
             <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
               <span className="hidden sm:inline">
-                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+                SoloStudy.uz-O'zbek tilidagi mustaqil ta'lim platformasi
               </span>
               <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
@@ -165,7 +165,7 @@ const Videos = () => {
         </div>
         {/* Mobile nav */}
         {isMenuOpen && (
-          <div className="lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
+          <div className="lg:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
             <a
               className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
               href="/"
@@ -292,7 +292,7 @@ const Videos = () => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 mt-16">
+      <footer className="w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-sm text-gray-500 dark:text-gray-400">

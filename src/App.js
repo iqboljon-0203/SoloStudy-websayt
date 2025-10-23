@@ -10,6 +10,7 @@ import Tests from "./pages/Tests";
 import Assignments from "./pages/Assignments";
 import AssignmentsByWeek from "./pages/AssignmentsByWeek";
 import Library from "./pages/Library";
+import News from "./pages/News";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
@@ -27,6 +28,7 @@ function App() {
           <Route path="/assignments" element={<Assignments />} />
           <Route path="/assignments/by-week" element={<AssignmentsByWeek />} />
           <Route path="/library" element={<Library />} />
+          <Route path="/news" element={<News />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />

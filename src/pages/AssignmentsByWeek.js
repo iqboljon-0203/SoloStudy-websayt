@@ -59,8 +59,8 @@ const AssignmentsByWeek = () => {
   };
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+    <div className="relative flex min-h-screen w-full flex-col bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
+      <header className="sticky top-0 z-50 w-full border-b border-gray-200/50 dark:border-gray-800/50 bg-white dark:bg-gray-900 backdrop-blur-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             to="/"
@@ -81,7 +81,7 @@ const AssignmentsByWeek = () => {
             </div>
             <h2 className="text-base sm:text-sm lg:text-base font-bold text-gray-900 dark:text-white leading-3 max-w-48 sm:max-w-56 lg:max-w-64">
               <span className="hidden sm:inline">
-                SoloStudy.uz – O'zbek tilidagi mustaqil ta'lim platformasi
+                SoloStudy.uz-O'zbek tilidagi mustaqil ta'lim platformasi
               </span>
               <span className="sm:hidden">SoloStudy.uz</span>
             </h2>
@@ -150,7 +150,7 @@ const AssignmentsByWeek = () => {
           </div>
         </div>
         {isMenuOpen && (
-          <div className="lg:hidden bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
+          <div className="lg:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-4 py-4 flex flex-col gap-3">
             <a
               className="text-sm font-medium text-gray-600 hover:text-[#A7D9FF] dark:text-gray-300 dark:hover:text-[#A7D9FF] transition-colors"
               href="/"
@@ -300,8 +300,8 @@ const AssignmentsByWeek = () => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-gradient-to-r from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 border-t border-gray-200 dark:border-gray-700 mt-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <footer className="w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
