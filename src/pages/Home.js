@@ -385,7 +385,7 @@ const Home = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
-                So'ngi yangiliklar
+                So'ngi ilmiy yangiliklar
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
