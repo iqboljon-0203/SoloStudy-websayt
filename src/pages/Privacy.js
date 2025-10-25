@@ -13,7 +13,7 @@ const Privacy = () => {
           >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
+                className="h-8 w-8 sm:h-10 sm:w-10 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"

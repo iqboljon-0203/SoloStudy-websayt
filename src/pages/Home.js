@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { newsData } from "../data/newsData";
 import Slider from "react-slick";
@@ -7,9 +7,18 @@ import "slick-carousel/slick/slick-theme.css";
 import Back1 from "../assets/back1.jpg";
 import Back2 from "../assets/back2.jpg";
 import Back3 from "../assets/back3.jpg";
+
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [sliderRef, setSliderRef] = useState(null);
+
+  // Event handlers - memoized
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen((prev) => !prev);
+  }, []);
+
+  // News data - memoized
+  const latestNews = useMemo(() => newsData.slice(0, 3), []);
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
       {/* Header */}
@@ -21,7 +30,7 @@ const Home = () => {
           >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
+                className="h-8 w-8 sm:h-10 sm:w-10 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +104,7 @@ const Home = () => {
             </a>
             <button
               className="md:hidden p-1 sm:p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleMenu}
             >
               <span className="material-symbols-outlined text-gray-800 dark:text-gray-200 text-lg sm:text-xl">
                 {isMenuOpen ? "close" : "menu"}
@@ -395,7 +404,7 @@ const Home = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {newsData.slice(0, 3).map((news) => (
+              {latestNews.map((news) => (
                 <Link
                   key={news.id}
                   to="/news"
@@ -407,6 +416,10 @@ const Home = () => {
                       src={news.image}
                       alt={news.title}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      width="400"
+                      height="192"
                       onError={(e) => {
                         e.target.style.display = "none";
                         e.target.nextSibling.style.display = "flex";
@@ -662,4 +675,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default React.memo(Home);

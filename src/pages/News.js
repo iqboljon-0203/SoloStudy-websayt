@@ -1,102 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { newsData } from "../data/newsData";
 
 const News = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Ilmiy yangiliklar ma'lumotlari
-  const newsData = [
-    {
-      id: 1,
-      title: "Pedagogika sohasidagi yangi tadqiqotlar",
-      summary:
-        "Zamonaviy ta'lim metodlari va ularning samaradorligi haqida yangi tadqiqot natijalari.",
-      content:
-        "So'nggi tadqiqotlar shuni ko'rsatadiki, interaktiv ta'lim metodlari an'anaviy usullarga qaraganda 40% ko'proq samara beradi. Bu metodlar o'quvchilarning faol qatnashishini oshiradi va bilimlarni uzoq muddatli saqlashga yordam beradi.",
-      author: "Dr. Alisher Navoiy",
-      date: "2024-01-15",
-      category: "Pedagogika",
-      image: "/images/news/pedagogy-research.jpg",
-      tags: ["ta'lim", "tadqiqot", "pedagogika"],
-    },
-    {
-      id: 2,
-      title: "Texnologiya va ta'lim integratsiyasi",
-      summary:
-        "Sun'iy intellekt va virtual reallik texnologiyalarining ta'lim sohasida qo'llanilishi.",
-      content:
-        "AI va VR texnologiyalari ta'lim jarayonini tubdan o'zgartirmoqda. Virtual laboratoriyalar, shaxsiylashtirilgan o'quv rejalari va real vaqtda baholash tizimlari keng qo'llanilmoqda.",
-      author: "Prof. Bobur Mirzo",
-      date: "2024-01-10",
-      category: "Texnologiya",
-      image: "/images/news/tech-education.jpg",
-      tags: ["texnologiya", "AI", "VR", "ta'lim"],
-    },
-    {
-      id: 3,
-      title: "O'zbekiston ta'lim tizimida islohotlar",
-      summary:
-        "2024-yil uchun rejalashtirilgan ta'lim tizimi islohotlari va yangi dasturlar.",
-      content:
-        "O'zbekiston Respublikasi Ta'lim vazirligi tomonidan 2024-yil uchun yangi ta'lim standartlari va dasturlari ishlab chiqildi. Bu islohotlar zamonaviy ta'lim texnologiyalarini joriy etishni nazarda tutadi.",
-      author: "Ta'lim vazirligi",
-      date: "2024-01-05",
-      category: "Siyosat",
-      image: "/images/news/education-reform.jpg",
-      tags: ["islohot", "ta'lim tizimi", "O'zbekiston"],
-    },
-    {
-      id: 4,
-      title: "Xalqaro ta'lim hamkorligi",
-      summary:
-        "O'zbekiston universitetlarining xorijiy universitetlar bilan hamkorligi kengaymoqda.",
-      content:
-        "O'zbekiston universitetlari Yevropa, Amerika va Osiyo universitetlari bilan yangi hamkorlik shartnomalarini imzoladi. Bu o'quvchilar uchun xalqaro tajriba olish imkoniyatlarini yaratadi.",
-      author: "Xalqaro ta'lim agentligi",
-      date: "2024-01-01",
-      category: "Xalqaro hamkorlik",
-      image: "/images/news/international-cooperation.jpg",
-      tags: ["xalqaro hamkorlik", "universitet", "tajriba"],
-    },
-    {
-      id: 5,
-      title: "Onlayn ta'limning kelajagi",
-      summary:
-        "Pandemiya davridan keyin onlayn ta'limning rivojlanish tendensiyalari.",
-      content:
-        "Onlayn ta'lim endi an'anaviy ta'limning to'ldiruvchi qismiga aylanmoqda. Hibrid ta'lim modellari eng samarali natijalarni beradi va kelajakda keng qo'llaniladi.",
-      author: "Dr. Zulfiya Xon",
-      date: "2023-12-28",
-      category: "Onlayn ta'lim",
-      image: "/images/news/online-education.jpg",
-      tags: ["onlayn ta'lim", "hibrid", "kelajak"],
-    },
-    {
-      id: 6,
-      title: "Fan va innovatsiya markazlari",
-      summary:
-        "O'zbekistonda yangi fan va innovatsiya markazlarining ochilishi.",
-      content:
-        "Respublika bo'ylab 10 ta yangi fan va innovatsiya markazi ochildi. Bu markazlar yosh olimlar va tadqiqotchilar uchun zamonaviy laboratoriyalar va texnologiyalar bilan ta'minlangan.",
-      author: "Fan va texnologiya vazirligi",
-      date: "2023-12-20",
-      category: "Innovatsiya",
-      image: "/images/news/innovation-centers.jpg",
-      tags: ["fan", "innovatsiya", "tadqiqot", "laboratoriya"],
-    },
-  ];
+  // Sahifani tepaga scroll qilish
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-  // Qidiruv natijalari
-  const filteredNews = newsData.filter(
-    (news) =>
-      news.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      news.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      news.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      news.tags.some((tag) =>
-        tag.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-  );
+  // Qidiruv natijalari - memoized
+  const filteredNews = useMemo(() => {
+    if (!searchQuery.trim()) return newsData;
+
+    return newsData.filter(
+      (news) =>
+        news.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        news.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        news.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        news.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        news.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        news.tags.some((tag) =>
+          tag.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+    );
+  }, [searchQuery]);
+
+  // Event handlers - memoized
+  const handleSearchChange = useCallback((e) => {
+    setSearchQuery(e.target.value);
+  }, []);
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen((prev) => !prev);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
@@ -108,7 +47,7 @@ const News = () => {
           >
             <div className="text-primary-light dark:text-primary">
               <svg
-                className="h-5 w-5 sm:h-6 sm:w-6 text-[#A7D9FF]"
+                className="h-8 w-8 sm:h-10 sm:w-10 text-[#A7D9FF]"
                 fill="none"
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +121,7 @@ const News = () => {
             </a>
             <button
               className="lg:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleMenu}
             >
               <span className="material-symbols-outlined text-gray-800 dark:text-gray-200">
                 {isMenuOpen ? "close" : "menu"}
@@ -270,7 +209,7 @@ const News = () => {
                   type="text"
                   placeholder="Yangiliklar bo'yicha qidiruv..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleSearchChange}
                   className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
@@ -280,9 +219,10 @@ const News = () => {
           {/* News Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredNews.map((news) => (
-              <article
+              <Link
                 key={news.id}
-                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-200/50 dark:border-gray-700/50"
+                to={`/news/${news.id}`}
+                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-200/50 dark:border-gray-700/50 block"
               >
                 {/* Image */}
                 <div className="h-48 bg-gradient-to-br from-primary/20 to-primary/30 dark:from-primary/30 dark:to-primary/40 flex items-center justify-center overflow-hidden">
@@ -290,6 +230,10 @@ const News = () => {
                     src={news.image}
                     alt={news.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="192"
                     onError={(e) => {
                       e.target.style.display = "none";
                       e.target.nextSibling.style.display = "flex";
@@ -342,7 +286,7 @@ const News = () => {
                     ))}
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
 
@@ -449,4 +393,4 @@ const News = () => {
   );
 };
 
-export default News;
+export default React.memo(News);
