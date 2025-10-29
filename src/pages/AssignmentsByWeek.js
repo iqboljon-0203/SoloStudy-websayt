@@ -196,7 +196,7 @@ const AssignmentsByWeek = () => {
           {/* Hero Section */}
           <div className="text-center mb-16">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter mb-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 dark:from-white dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
-              Mustaqil o'qish topshiriqlari
+              Mustaqil ta'lim topshiriqlari
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl font-light text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
               Haftalar bo'yicha topshiriqlarni yuklab oling. Turli xil
