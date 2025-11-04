@@ -288,6 +288,45 @@ const Home = () => {
           </Slider>
         </section>
 
+        {/* HEMIS Login Section */}
+        <section className="py-16 sm:py-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
+          {/* Decorative circle */}
+          <div className="absolute right-0 bottom-0 w-96 h-96 bg-teal-400 dark:bg-teal-600 rounded-full opacity-20 blur-3xl transform translate-x-1/4 translate-y-1/4"></div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
+                  HEMIS tizimiga kirish
+                </h2>
+                <div className="w-24 h-1 bg-primary mx-auto mb-4"></div>
+                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                  Talaba HEMIS ID va paroli bilan kirishni amalga oshiring
+                </p>
+              </div>
+
+              {/* Iframe Container */}
+              <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
+                <div
+                  className="relative w-full overflow-hidden"
+                  style={{ minHeight: "400px", height: "550px", maxHeight: "550px" }}
+                >
+                  <iframe
+                    src="https://hemis.adpi.uz/dashboard/login"
+                    className="w-full h-full border-0 rounded-2xl overflow-hidden"
+                    title="HEMIS Login"
+                    allow="fullscreen"
+                    loading="lazy"
+                    scrolling="no"
+                    style={{ overflow: "hidden" }}
+                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
+                  ></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Purpose Section */}
         <section className="py-16 sm:py-24 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
